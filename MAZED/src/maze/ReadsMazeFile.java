@@ -27,7 +27,7 @@ public class ReadsMazeFile {
 				Scanner scannerLine = new Scanner(currentLine);
 				//
 				maze.add(new ArrayList<String>(i));
-				System.out.println("i equal "+i);
+				//System.out.println("i equal "+i);
 				//int j=0;
 				while(scannerLine.hasNext())
 				{
@@ -48,13 +48,20 @@ public class ReadsMazeFile {
 		catch(FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		return (maze);
-		//System.out.println("Size of Array is "+maze.size());
 		//for (int i=0; i< maze.size(); i++)
 		//{
+		//	String toPrint = "";
 		//	for (int j=0; j<7;j++)
-		//	System.out.println(maze.get(i).get(j));
+		//	{
+		//		toPrint = toPrint+maze.get(i).get(j)+" ";
+		//	}
+		//	System.out.println(toPrint);
+		
 		//}
+		
+		return (maze);
+		
+		
 	}
 
 
