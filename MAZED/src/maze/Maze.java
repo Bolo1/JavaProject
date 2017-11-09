@@ -5,17 +5,20 @@ import java.util.ArrayList;
 public class Maze {
 	
 	public String name;//Contain the name of the maze to later write it in the high score txt file
-	private ArrayList <ArrayList<String>> description;//Contain the description of the file
-	public char[][] dispMaze;
-
+	private ArrayList <ArrayList<String>> description;//Contain the description of the Maze
+	public char[][] dispMaze;//Contain the "picture" of the maze 
+	
+	// Let us create a constructor
 	Maze(String mazeName, ArrayList <ArrayList<String>> mazeDescription, char[][] displayOfMaze )
 	{
+		//fill up the attribute with the input of the constructor
 		name = mazeName;
 		description = mazeDescription;
 		dispMaze = displayOfMaze;
 	}
 	
-	public void displayMaze(int [] positionPlayer )
+	//Let us create a method to dipslay/refresh the maze. The function takes into account the player position
+	public void displayMaze(int [] positionPlayer)
 	{
 			dispMaze[1+positionPlayer[0]*2][2+positionPlayer[1]*4] = 'P';
 		

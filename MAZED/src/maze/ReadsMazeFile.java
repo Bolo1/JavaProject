@@ -75,113 +75,94 @@ public class ReadsMazeFile {
 		sizeMaze[0] = Integer.parseInt(description.get(description.size()-1).get(0));
 		sizeMaze[1] = sizeMaze[0];// Integer.parseInt(description.get(description.size()-1).get(1));
 
-		//String[] dispMaze = new String [(sizeMaze[0]+1)*2+1];
-
-		char [] [] dispMaze = new char [(sizeMaze[0]+1)*2+1][(sizeMaze[0]+1)*4+1];
-
-		/*for (int l=0; l<(sizeMaze[0]+1)*2+1;l++)
-		{
-			dispMaze[l]="";
-		}*/
+		char [] [] dispMaze = new char [(sizeMaze[0]+1)*2+1][(sizeMaze[0]+1)*4+1];// Declare 2D array of char 
 
 
-		for (int i=0; i<sizeMaze[0]+1;i++)
+		for (int i=0; i<sizeMaze[0]+1;i++)//loop through the different row index
 		{
 
-			for(int j=0; j<sizeMaze[1]+1;j++)
+			for(int j=0; j<sizeMaze[1]+1;j++)//loop through the different column index
 			{
 
-				if (i == sizeMaze[0])
+				if (i == sizeMaze[0])//if i reached the last row then consider the southwall...
 				{
-					String mazeElementSouth = description.get(1+i+j*(sizeMaze[0])).get(3);
+					String mazeElementSouth = description.get(1+i+j*(sizeMaze[0])).get(3);// check southwall of the element
 
-					switch (mazeElementSouth)
+					switch (mazeElementSouth)// action depending on the value contain in the wall
 					{
-					case "wall":// dispMaze[dispMaze.length-1]=dispMaze[dispMaze.length-1]+"+---";
-						dispMaze[(sizeMaze[0]+1)*2][4*j]   = '+';
-						dispMaze[(sizeMaze[0]+1)*2][4*j+1] = '-';
-						dispMaze[(sizeMaze[0]+1)*2][4*j+2] = '-';
-						dispMaze[(sizeMaze[0]+1)*2][4*j+3] = '-';
-						break;
+					case "wall": dispMaze[(sizeMaze[0]+1)*2][4*j]   = '+';
+								 dispMaze[(sizeMaze[0]+1)*2][4*j+1] = '-';
+								 dispMaze[(sizeMaze[0]+1)*2][4*j+2] = '-';
+								 dispMaze[(sizeMaze[0]+1)*2][4*j+3] = '-';
+								 break;
+						
 
-					case "no"  : //dispMaze[dispMaze.length-1]=dispMaze[dispMaze.length-1]+"+   ";
-						dispMaze[(sizeMaze[0]+1)*2][4*j]   = '+';
-						dispMaze[(sizeMaze[0]+1)*2][4*j+1] = ' ';
-						dispMaze[(sizeMaze[0]+1)*2][4*j+2] = ' ';
-						dispMaze[(sizeMaze[0]+1)*2][4*j+3] = ' ';
-						break;
+					case "no"  : dispMaze[(sizeMaze[0]+1)*2][4*j]   = '+';
+								 dispMaze[(sizeMaze[0]+1)*2][4*j+1] = ' ';
+								 dispMaze[(sizeMaze[0]+1)*2][4*j+2] = ' ';
+								 dispMaze[(sizeMaze[0]+1)*2][4*j+3] = ' ';
+								 break;
+					default: System.err.println("Unknown Type of wall");
 					}
 
-					if (j== sizeMaze[0])
+					if (j== sizeMaze[0])//if last column
 					{
-						//dispMaze[dispMaze.length-1]=dispMaze[dispMaze.length-1]+"+";
 						dispMaze[i*2+2][(sizeMaze[0]+1)*4]   = '+';
-
 					}
 
 				}
+				
+				String mazeElementNorth = description.get(1+i+j*(sizeMaze[0])).get(2);//Check North wall
+				String mazeElementWest  = description.get(1+i+j*(sizeMaze[0])).get(5);//Check west wall
 
-				String mazeElementNorth = description.get(1+i+j*(sizeMaze[0])).get(2);
-				String mazeElementWest  = description.get(1+i+j*(sizeMaze[0])).get(5);
-
-				switch (mazeElementNorth)
+				switch (mazeElementNorth)//Action depending on the type of wall
 				{
-				case "wall": //dispMaze[i*2]=dispMaze[i*2]+"+---";
-					dispMaze[i*2][4*j]   = '+';
-					dispMaze[i*2][4*j+1] = '-';
-					dispMaze[i*2][4*j+2] = '-';
-					dispMaze[i*2][4*j+3] = '-';
-					break;
+				case "wall": dispMaze[i*2][4*j]   = '+';
+							 dispMaze[i*2][4*j+1] = '-';
+							 dispMaze[i*2][4*j+2] = '-';
+							 dispMaze[i*2][4*j+3] = '-';
+							 break;
 
-				case "no"  : //dispMaze[i*2]=dispMaze[i*2]+"+   ";
-					dispMaze[i*2][4*j]   = '+';
-					dispMaze[i*2][4*j+1] = ' ';
-					dispMaze[i*2][4*j+2] = ' ';
-					dispMaze[i*2][4*j+3] = ' ';
-					break;
+				case "no":   dispMaze[i*2][4*j]   = '+';
+							 dispMaze[i*2][4*j+1] = ' ';
+							 dispMaze[i*2][4*j+2] = ' ';
+							 dispMaze[i*2][4*j+3] = ' ';
+							 break;
+				default: System.err.println("Unknown Type of wall");
 				}
-
-				switch (mazeElementWest)
+				switch (mazeElementWest)//Action depending on the type of wall
 				{
-				case "wall": //dispMaze[i*2+1]=dispMaze[i*2+1]+"|   ";
-					dispMaze[i*2+1][4*j]   = '|';
-					dispMaze[i*2+1][4*j+1] = ' ';
-					dispMaze[i*2+1][4*j+2] = ' ';
-					dispMaze[i*2+1][4*j+3] = ' ';
-					break;
-
-				case "no"  : //dispMaze[i*2+1]=dispMaze[i*2+1]+"    ";
-					dispMaze[i*2+1][4*j]   = ' ';
-					dispMaze[i*2+1][4*j+1] = ' ';
-					dispMaze[i*2+1][4*j+2] = ' ';
-					dispMaze[i*2+1][4*j+3] = ' ';
-					break;
+				case "wall": dispMaze[i*2+1][4*j]   = '|';
+							 dispMaze[i*2+1][4*j+1] = ' ';
+							 dispMaze[i*2+1][4*j+2] = ' ';
+							 dispMaze[i*2+1][4*j+3] = ' ';
+							 break;
+							 
+				case "no":   dispMaze[i*2+1][4*j]   = ' ';
+							 dispMaze[i*2+1][4*j+1] = ' ';
+							 dispMaze[i*2+1][4*j+2] = ' ';
+							 dispMaze[i*2+1][4*j+3] = ' ';
+							 break;
+				default: System.err.println("Unknown Type of wall");
 				}
-
-
-				if (j == sizeMaze[0])
+				if (j == sizeMaze[0])// if the last column is reach take into account the Eastern wall
 				{
-					//dispMaze[i*2] = dispMaze[i*2]+"+";
-					dispMaze[i*2][(sizeMaze[0]+1)*4]   = '+';
-					String mazeElementEast = description.get(1+i+j*(sizeMaze[0])).get(4);
+					dispMaze[i*2][(sizeMaze[0]+1)*4]   = '+';//add a "+" one line out of two
+					String mazeElementEast = description.get(1+i+j*(sizeMaze[0])).get(4);//Check the East element
 
 					switch (mazeElementEast)
 					{
-					case "wall": //dispMaze[i*2+1]=dispMaze[i*2+1]+"|";
-						dispMaze[i*2+1][(sizeMaze[0]+1)*4]   = '|';
+					case "wall": dispMaze[i*2+1][(sizeMaze[0]+1)*4]   = '|';
 						break;
-					case "no"  : //dispMaze[i*2+1]=dispMaze[i*2+1]+"";
-						dispMaze[i*2+1][(sizeMaze[0]+1)*4]   = ' ';
+					case "no"  : dispMaze[i*2+1][(sizeMaze[0]+1)*4]   = ' ';
 						break;
+					default: System.err.println("Unknown Type of wall");
 					}
-
-
 				}	
-
 			}
 		}
-		dispMaze[1+0*2][2+0*4] = 'S';
-		dispMaze[1+sizeMaze[0]*2][2+sizeMaze[0]*4] = 'E';
+		dispMaze[1+0*2][2+0*4] = 'S';// Place the Starting point
+		dispMaze[1+sizeMaze[0]*2][2+sizeMaze[0]*4] = 'E';// Place the end point 
 		return (dispMaze);
 	}
 
