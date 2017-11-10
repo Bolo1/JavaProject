@@ -1,21 +1,16 @@
 package userInterface;
 import javax.swing.*;
-import java.awt.*;
 
-import javax.swing.text.*;
 
-public class TextPane extends JTextPane {
+public class TextArea extends JTextArea {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	TextPane(){
-		setContentType("text/html");
+	TextArea(){
 		setEditable(false);
-		
-		
-	
+
 	}
 	 
 }
