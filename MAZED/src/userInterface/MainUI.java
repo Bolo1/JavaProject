@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicArrowButton;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 
 public class MainUI extends JFrame {
@@ -58,11 +59,8 @@ public class MainUI extends JFrame {
 		buttonPanel.setLayout(layoutButtonPanel);
 		GridBagConstraints c = new GridBagConstraints();
 		buttonPanel.setBackground(Color.darkGray);
-		Dimension bPanelDim = new Dimension(200,200);
-		buttonPanel.setPreferredSize(bPanelDim);
 		contentPane.add(buttonPanel);
 		
-		System.out.println(buttonPanel.getWidth());
 		
 		//Create buttons
 		//JButton buttonUp = new JButton("Up");
@@ -76,7 +74,11 @@ public class MainUI extends JFrame {
 		c.gridx = 1;
 		c.gridy = 0;
 		
+		buttonUp.setMnemonic(KeyEvent.VK_W);
+		buttonUp.setToolTipText("Alt+W");
+		
 		buttonPanel.add(buttonUp, c);
+		
 		BasicArrowButton buttonLeft = new BasicArrowButton ((BasicArrowButton.WEST));
 		buttonLeft.setBackground(Color.white);
 		buttonLeft.setForeground(Color.blue);
@@ -84,18 +86,29 @@ public class MainUI extends JFrame {
 		c.gridy = 1;
 		buttonPanel.add(buttonLeft, c);
 		
+		buttonLeft.setMnemonic(KeyEvent.VK_A);
+		buttonLeft.setToolTipText("Alt+A");
+		
 		BasicArrowButton buttonRight= new BasicArrowButton ((BasicArrowButton.EAST));
 		buttonRight.setBackground(Color.white);
 		buttonRight.setForeground(Color.blue);
 		c.gridx = 2;
 		c.gridy = 1;
+		
+		buttonRight.setMnemonic(KeyEvent.VK_D);
+		buttonRight.setToolTipText("Alt+D");
+		
 		buttonPanel.add(buttonRight, c);
+		
 		
 		BasicArrowButton buttonDown = new BasicArrowButton ((BasicArrowButton.SOUTH));
 		buttonDown.setBackground(Color.white);
 		buttonDown.setForeground(Color.blue);
 		c.gridx = 1;
 		c.gridy = 1;
+		
+		buttonDown.setMnemonic(KeyEvent.VK_S);
+		buttonDown.setToolTipText("Alt+S");
 		buttonPanel.add(buttonDown, c);
 		
 		

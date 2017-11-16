@@ -16,7 +16,7 @@ public class MazeMain {
 		int [] playerPosition = {0,0};
 		Player player = new Player(playerName,playerPosition);
 		
-		System.out.println(player.name +" The Dahaka put you in a terrible maze full of trap and dangers and, it is coming coming for you ! So hurry up! ");
+		System.out.println(player.getPlayerName() +" The Dahaka put you in a terrible maze full of trap and dangers and, it is coming coming for you ! So hurry up! ");
 		System.out.println("You need to get out of there ! To help you I put a map of the maze on which I will update your position.");
 		
 		
@@ -28,7 +28,7 @@ public class MazeMain {
 		
 		
 		myMaze.displayMaze();
-		myMaze.displayMaze(player.position);
+		myMaze.displayMaze(player.getPlayerPosition());
 		
 	}
 	
