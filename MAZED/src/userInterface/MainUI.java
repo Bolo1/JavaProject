@@ -1,6 +1,8 @@
 package userInterface;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicArrowButton;
+
 import java.awt.*;
 
 
@@ -48,8 +50,54 @@ public class MainUI extends JFrame {
 		mainPanel.add(mazeConsole);
 		
 		
+		//Create a third panel to put buttons
 		
-	
+		JPanel buttonPanel = new JPanel();
+		GridBagLayout layoutButtonPanel = new GridBagLayout();
+		
+		buttonPanel.setLayout(layoutButtonPanel);
+		GridBagConstraints c = new GridBagConstraints();
+		buttonPanel.setBackground(Color.darkGray);
+		Dimension bPanelDim = new Dimension(200,200);
+		buttonPanel.setPreferredSize(bPanelDim);
+		contentPane.add(buttonPanel);
+		
+		System.out.println(buttonPanel.getWidth());
+		
+		//Create buttons
+		//JButton buttonUp = new JButton("Up");
+		BasicArrowButton buttonUp = new BasicArrowButton ((BasicArrowButton.NORTH));
+		buttonUp.setBackground(Color.white);
+		buttonUp.setForeground(Color.blue);
+		c.fill = GridBagConstraints.BOTH;
+		c.ipadx = 60;
+		c.ipady = 60;
+		
+		c.gridx = 1;
+		c.gridy = 0;
+		
+		buttonPanel.add(buttonUp, c);
+		BasicArrowButton buttonLeft = new BasicArrowButton ((BasicArrowButton.WEST));
+		buttonLeft.setBackground(Color.white);
+		buttonLeft.setForeground(Color.blue);
+		c.gridx = 0;
+		c.gridy = 1;
+		buttonPanel.add(buttonLeft, c);
+		
+		BasicArrowButton buttonRight= new BasicArrowButton ((BasicArrowButton.EAST));
+		buttonRight.setBackground(Color.white);
+		buttonRight.setForeground(Color.blue);
+		c.gridx = 2;
+		c.gridy = 1;
+		buttonPanel.add(buttonRight, c);
+		
+		BasicArrowButton buttonDown = new BasicArrowButton ((BasicArrowButton.SOUTH));
+		buttonDown.setBackground(Color.white);
+		buttonDown.setForeground(Color.blue);
+		c.gridx = 1;
+		c.gridy = 1;
+		buttonPanel.add(buttonDown, c);
+		
 		
 	}
 	
@@ -57,6 +105,7 @@ public class MainUI extends JFrame {
 	public static void main(String[] args) {
 		JFrame frame = new MainUI();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
 		frame.setVisible(true);
 		
 		
