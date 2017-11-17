@@ -1,6 +1,9 @@
 package maze;
 
+import java.awt.Font;
 import java.util.ArrayList;
+
+import userInterface.TextArea;
 
 public class Maze {
 	
@@ -18,6 +21,25 @@ public class Maze {
 	}
 	
 	//Let us create a method to dipslay/refresh the maze. The function takes into account the player position
+	public void displayMaze(int [] positionPlayer, TextArea mazeConsole)
+	{
+			dispMaze[1+positionPlayer[0]*2][2+positionPlayer[1]*4] = 'P';
+		
+			for (char[] u:dispMaze)
+			{
+				String toPrint ="";
+				for(char v:u)
+				{
+					 toPrint =toPrint+v;
+				}
+				System.out.println(toPrint);
+				
+				mazeConsole.updateText(toPrint+"\n");
+				
+			}
+		
+		}
+			
 	public void displayMaze(int [] positionPlayer)
 	{
 			dispMaze[1+positionPlayer[0]*2][2+positionPlayer[1]*4] = 'P';
@@ -31,6 +53,7 @@ public class Maze {
 					 toPrint =toPrint+v;
 				}
 				System.out.println(toPrint);
+				
 			}
 		
 		}

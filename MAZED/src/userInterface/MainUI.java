@@ -13,7 +13,10 @@ public class MainUI extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private JPanel titlePanel;
+	private TextArea title;
+	public TextArea mazeConsole;
+	public TextArea mazeText;
 
 	public MainUI() {
 		setTitle("Maze Escape");
@@ -22,33 +25,60 @@ public class MainUI extends JFrame {
 		addWindowListener(new CloseWindow());	
 		
 		//Create a first Panel: Title Panel
-		JPanel titlePanel = new JPanel();
+		this.titlePanel = new JPanel();
 		Container contentPane = getContentPane();
 		BoxLayout layout = new BoxLayout(contentPane, BoxLayout.Y_AXIS);
 		contentPane.setLayout(layout);
-		titlePanel.setBackground(Color.darkGray);
-		contentPane.add(titlePanel);
+		this.titlePanel.setBackground(Color.darkGray);
+		contentPane.add(this.titlePanel);
 		
 		//Create a text Area inside the panel
-		TextArea title = new TextArea();
-		title.setBackground(Color.darkGray);
-		title.setForeground(Color.white);
+		this.title = new TextArea();
+		this.title.setBackground(Color.darkGray);
+		this.title.setForeground(Color.white);
 		Font font = new Font ("Candara", Font.BOLD, 60);
-		title.setFont(font);
-		title.setText("Maze Escape");
-		titlePanel.add(title);
+		this.title.setFont(font);
+		this.title.setText("Maze Escape");
+		this.titlePanel.add(this.title);
+		
+		//Create a second panel for text: panelText
+		
+		JPanel panelText = new JPanel();
+		panelText.setBackground(Color.black);
+		contentPane.add(panelText);
+		
+		//Create a second Text area for displaying console
+		this.mazeText = new TextArea();
+		Dimension minDimText = new Dimension(500,400);
+		Dimension maxDimText = new Dimension(1500,1200);
+		//this.mazeConsole.setPreferredSize(maxDim);
+		this.mazeText.setMaximumSize(maxDimText);
+		this.mazeText.setMinimumSize(minDimText);
+		this.mazeText.setBackground(Color.black);
+		this.mazeText.setForeground(Color.white);
+		this.mazeText.setFont( new Font("monospaced", Font.PLAIN, 20) );
+		panelText.add(this.mazeText);
+		
+		
 		
 		//Create a second panel: Main Panel
 		JPanel mainPanel = new JPanel();
-		mainPanel.setBackground(Color.darkGray);
+		mainPanel.setBackground(Color.black);
 		contentPane.add(mainPanel);
 		
 		//Create a second Text area for displaying console
-		TextArea mazeConsole = new TextArea();
-		Dimension dim = new Dimension(700,500);
-		mazeConsole.setPreferredSize(dim);
-		mazeConsole.setBackground(Color.black);
-		mainPanel.add(mazeConsole);
+		this.mazeConsole = new TextArea();
+		Dimension minDim = new Dimension(500,400);
+		Dimension maxDim = new Dimension(1500,1200);
+		//this.mazeConsole.setPreferredSize(maxDim);
+		this.mazeConsole.setMaximumSize(maxDim);
+		this.mazeConsole.setPreferredSize(minDim);
+		this.mazeConsole.setBackground(Color.black);
+		this.mazeConsole.setForeground(Color.white);
+		this.mazeConsole.setFont( new Font("monospaced", Font.PLAIN, 40) );
+		
+		
+		mainPanel.add(this.mazeConsole);
 		
 		
 		//Create a third panel to put buttons
@@ -111,15 +141,18 @@ public class MainUI extends JFrame {
 		buttonDown.setToolTipText("Alt+S");
 		buttonPanel.add(buttonDown, c);
 		
-		
 	}
+	
+	/*public TextArea getMazeConsole(){
+		return this.mazeConsole;
+	}*/
 	
 	
 	public static void main(String[] args) {
-		JFrame frame = new MainUI();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
+		//JFrame frame = new MainUI();
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.pack();
+		//frame.setVisible(true);
 		
 		
 	}
