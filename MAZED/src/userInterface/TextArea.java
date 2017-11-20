@@ -7,7 +7,7 @@ public class TextArea extends JTextArea {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	TextArea(){
 		//setEditable(false);
 	
@@ -27,4 +27,5 @@ public class TextArea extends JTextArea {
 	 public void clearText() {
 		 this.setText(null);
 	 }
+	 
 }

@@ -1,11 +1,15 @@
 package maze;
 import player.Player;
 import userInterface.MainUI;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 public class MazeMain {
 	public static void initGame()
@@ -19,7 +23,7 @@ public class MazeMain {
 		Scanner userInput = new Scanner(System.in);
 		
 		frame.mazeText.updateText(" Hello, Prince of Persia ! What is your name ? ");
-		System.out.println(frame.mazeConsole.getText());
+		System.out.println(frame.mazeText.getText());
 		String playerName = userInput.next();
 		userInput.close();
 		int [] playerPosition = {0,0};
@@ -39,9 +43,53 @@ public class MazeMain {
 		myMaze.displayMaze();
 		myMaze.displayMaze(player.getPlayerPosition(),frame.mazeConsole);
 		
+		int delay = 500;
+		//int counter = 1;
+		
+		
+		ActionListener taskPerformer = new ActionListener() {
+			public void actionPerformed (ActionEvent evt) {
+			//First task check if button was pressed
+				if (frame.buttonListener.getWasPressed()!="") {
+					switch (frame.buttonListener.getWasPressed()) {
+					case "Up": {int [] playerPos = player.getPlayerPosition();
+							   playerPos[0] -=1;
+							   player.setPlayerPosition(playerPos);
+							   frame.buttonListener.resetWasPressed();
+							   break;}
+					
+					case "Left":{ int [] playerPos = player.getPlayerPosition();
+					   playerPos[1] -=1;
+					   player.setPlayerPosition(playerPos);
+					   frame.buttonListener.resetWasPressed();
+					   break;}
+					
+					case "Right":{ int [] playerPos = player.getPlayerPosition();
+					   playerPos[1] +=1;
+					   player.setPlayerPosition(playerPos);
+					   frame.buttonListener.resetWasPressed();
+					   break;}
+					   
+					case "Down":{ int [] playerPos = player.getPlayerPosition();
+					   playerPos[0] +=1;
+					   player.setPlayerPosition(playerPos);
+					   frame.buttonListener.resetWasPressed();
+					   break;}
+					}
+					
+					myMaze.displayMaze(player.getPlayerPosition(), frame.mazeConsole);
+					
+				}
+			
+			}
+		};
+		
+		new Timer(delay,taskPerformer).start();
+		
+		
+		
+		
 	}
-	
-	
 	
 
 	public static void main(String[] args) {

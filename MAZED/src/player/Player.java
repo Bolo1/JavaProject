@@ -6,6 +6,7 @@ public class Player {
 	private int[] position;
 	private ArrayList<Item> inventory;
 	private int lineOfSight=2;//Only used in hard mode
+
 	
 public Player(String playerName, int[] playerPosition)
 	{

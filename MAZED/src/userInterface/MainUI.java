@@ -1,13 +1,10 @@
 package userInterface;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicArrowButton;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-
-public class MainUI extends JFrame {
+public class MainUI extends JFrame{
 	
 	/**
 	 * 
@@ -17,8 +14,14 @@ public class MainUI extends JFrame {
 	private TextArea title;
 	public TextArea mazeConsole;
 	public TextArea mazeText;
-
+	public MyArrowButton buttonUp;
+	public MyArrowButton buttonLeft;
+	public MyArrowButton buttonRight;
+	public MyArrowButton buttonDown;
+	public MyButtonListener buttonListener;
 	public MainUI() {
+		
+		
 		setTitle("Maze Escape");
 		setSize(1600,900);
 		setLocation(150,100);
@@ -57,6 +60,8 @@ public class MainUI extends JFrame {
 		this.mazeText.setBackground(Color.black);
 		this.mazeText.setForeground(Color.white);
 		this.mazeText.setFont( new Font("monospaced", Font.PLAIN, 20) );
+		
+		
 		panelText.add(this.mazeText);
 		
 		
@@ -69,14 +74,14 @@ public class MainUI extends JFrame {
 		//Create a second Text area for displaying console
 		this.mazeConsole = new TextArea();
 		Dimension minDim = new Dimension(500,400);
-		Dimension maxDim = new Dimension(1500,1200);
+		Dimension maxDim = new Dimension(2000,1600);
 		//this.mazeConsole.setPreferredSize(maxDim);
 		this.mazeConsole.setMaximumSize(maxDim);
-		this.mazeConsole.setPreferredSize(minDim);
+		this.mazeConsole.setMinimumSize(minDim);
 		this.mazeConsole.setBackground(Color.black);
 		this.mazeConsole.setForeground(Color.white);
 		this.mazeConsole.setFont( new Font("monospaced", Font.PLAIN, 40) );
-		
+		this.mazeConsole.setEditable(false);
 		
 		mainPanel.add(this.mazeConsole);
 		
@@ -87,73 +92,69 @@ public class MainUI extends JFrame {
 		GridBagLayout layoutButtonPanel = new GridBagLayout();
 		
 		buttonPanel.setLayout(layoutButtonPanel);
+		
 		GridBagConstraints c = new GridBagConstraints();
-		buttonPanel.setBackground(Color.darkGray);
-		contentPane.add(buttonPanel);
-		
-		
-		//Create buttons
-		//JButton buttonUp = new JButton("Up");
-		BasicArrowButton buttonUp = new BasicArrowButton ((BasicArrowButton.NORTH));
-		buttonUp.setBackground(Color.white);
-		buttonUp.setForeground(Color.blue);
 		c.fill = GridBagConstraints.BOTH;
 		c.ipadx = 60;
 		c.ipady = 60;
 		
+		buttonPanel.setBackground(Color.darkGray);
+		contentPane.add(buttonPanel);
+		
+		// Let us create a button listener
+		
+		this.buttonListener = new MyButtonListener();
+		
+		this.buttonUp = new MyArrowButton ((MyArrowButton.NORTH));
 		c.gridx = 1;
 		c.gridy = 0;
 		
-		buttonUp.setMnemonic(KeyEvent.VK_W);
-		buttonUp.setToolTipText("Alt+W");
+		this.buttonUp.setMnemonic(KeyEvent.VK_W);
+		this.buttonUp.setToolTipText("Alt+W");
+		this.buttonUp.addActionListener(this.buttonListener);
+		this.buttonUp.setActionCommand("Up");
 		
-		buttonPanel.add(buttonUp, c);
+		buttonPanel.add(this.buttonUp, c);
 		
-		BasicArrowButton buttonLeft = new BasicArrowButton ((BasicArrowButton.WEST));
-		buttonLeft.setBackground(Color.white);
-		buttonLeft.setForeground(Color.blue);
+		this.buttonLeft = new MyArrowButton ((MyArrowButton.WEST));
 		c.gridx = 0;
 		c.gridy = 1;
-		buttonPanel.add(buttonLeft, c);
 		
-		buttonLeft.setMnemonic(KeyEvent.VK_A);
-		buttonLeft.setToolTipText("Alt+A");
+		this.buttonLeft.setMnemonic(KeyEvent.VK_A);
+		this.buttonLeft.setToolTipText("Alt+A");
+		this.buttonLeft.setActionCommand("Left");
+		this.buttonLeft.addActionListener(this.buttonListener);
+		buttonPanel.add(this.buttonLeft, c);
 		
-		BasicArrowButton buttonRight= new BasicArrowButton ((BasicArrowButton.EAST));
-		buttonRight.setBackground(Color.white);
-		buttonRight.setForeground(Color.blue);
+		
+		this.buttonRight= new MyArrowButton((MyArrowButton.EAST));
 		c.gridx = 2;
 		c.gridy = 1;
 		
-		buttonRight.setMnemonic(KeyEvent.VK_D);
-		buttonRight.setToolTipText("Alt+D");
+		this.buttonRight.setMnemonic(KeyEvent.VK_D);
+		this.buttonRight.setToolTipText("Alt+D");
+		this.buttonRight.setActionCommand("Right");
+		this.buttonRight.addActionListener(this.buttonListener);
+		buttonPanel.add(this.buttonRight, c);
 		
-		buttonPanel.add(buttonRight, c);
-		
-		
-		BasicArrowButton buttonDown = new BasicArrowButton ((BasicArrowButton.SOUTH));
-		buttonDown.setBackground(Color.white);
-		buttonDown.setForeground(Color.blue);
+		this.buttonDown = new MyArrowButton ((MyArrowButton.SOUTH));
 		c.gridx = 1;
 		c.gridy = 1;
 		
-		buttonDown.setMnemonic(KeyEvent.VK_S);
-		buttonDown.setToolTipText("Alt+S");
-		buttonPanel.add(buttonDown, c);
+		this.buttonDown.setMnemonic(KeyEvent.VK_S);
+		this.buttonDown.setToolTipText("Alt+S");
+		this.buttonDown.setActionCommand("Down");
+		this.buttonDown.addActionListener(this.buttonListener);
+		buttonPanel.add(this.buttonDown, c);
 		
 	}
 	
-	/*public TextArea getMazeConsole(){
-		return this.mazeConsole;
-	}*/
-	
+
 	
 	public static void main(String[] args) {
-		//JFrame frame = new MainUI();
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//frame.pack();
-		//frame.setVisible(true);
-		
+	
 		
 	}
+	
+
 }
