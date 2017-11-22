@@ -38,6 +38,7 @@ public class ReadsMazeFile {
 					maze.get(i).add(scannerLine.next());
 
 				}
+				
 				//Increment the counter
 				i++;
 				//read the next line and store it into currentLine
