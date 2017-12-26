@@ -4,6 +4,8 @@ import miscellaneousItem.Item;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+
+import maze.Maze;
 public class Player {
 	private String name;
 	private Point2D currentPosition;
@@ -104,6 +106,67 @@ public class Player {
 			break;}
 		}
 	}
+	
+	public boolean canMove(String dir, Maze myMaze) {
+		
+		int indexX = (int) this.currentPosition.getX();
+		int indexY = (int) this.currentPosition.getY();
+		
+		int index = indexX+indexY;
+		boolean canMove = false;
+		switch (dir) {
+		
+		case "Up":{
+			if (index == 0) {
+				canMove = false;
+			}else {
+			int indexWall = 2;
+			String mazeElem = myMaze.getMazeDescription(index,indexWall);
+			switch (mazeElem) {
+			case "wall":
+				canMove =  false;
+			case "no":
+				canMove =  true;
+			}
+			}
+			break;}
+			
+		case "Down":{
+			int indexWall = 3;
+			String mazeElem = myMaze.getMazeDescription(index,indexWall);
+			switch (mazeElem) {
+			case "wall":
+				canMove =  false;
+			case "no":
+				canMove =  true;
+			}
+		}
+		case "Left":{
+				int indexWall = 4;
+				String mazeElem = myMaze.getMazeDescription(index,indexWall);
+				switch (mazeElem) {
+				case "wall":
+					canMove =  false;
+				case "no":
+					canMove =  true;
+				}
+		}
+		
+		case "Right":{
+			int indexWall = 5;
+			String mazeElem = myMaze.getMazeDescription(index,indexWall);
+			switch (mazeElem) {
+			case "wall":
+				canMove =  false;
+			case "no":
+				canMove =  true;
+			}
+		}
+		default :
+			canMove =  false;
+	}
+		return canMove;
+		}
 
 	public ArrayList<Item> getPlayerInventory(){
 		return (this.inventory);

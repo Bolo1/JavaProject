@@ -93,7 +93,12 @@ public class Maze {
 			}
 		
 		}
-	public ArrayList <ArrayList<String>> getMazeDescription(){
+	public  String getMazeDescription(int index1, int index2){
+		
+		return this.description.get(index1).get(index2);
+	}
+	
+	public ArrayList<ArrayList<String>> getMazeDescription () {
 		return this.description;
 	}
 	

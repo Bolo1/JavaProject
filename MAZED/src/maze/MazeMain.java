@@ -54,7 +54,11 @@ public class MazeMain {
 				
 				if (frame.buttonListener.getWasPressed()!="") {
 					
-					player.movePlayer(frame.buttonListener.getWasPressed(), myMaze.getMazeDescription());
+					if (player.canMove(frame.buttonListener.getWasPressed(),myMaze)){
+						player.movePlayer(frame.buttonListener.getWasPressed(), myMaze.getMazeDescription());
+					}else {}
+						
+					
 					frame.buttonListener.resetWasPressed();					
 					myMaze.displayMaze(player.getPlayerPosition(), frame.mazeConsole);
 					

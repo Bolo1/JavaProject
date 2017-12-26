@@ -91,17 +91,17 @@ public class ReadsMazeFile {
 
 					switch (mazeElementSouth)// action depending on the value contain in the wall
 					{
-					case "wall": dispMaze[(sizeMaze[0]+1)*2][4*j]   = '+';
-								 dispMaze[(sizeMaze[0]+1)*2][4*j+1] = '-';
-								 dispMaze[(sizeMaze[0]+1)*2][4*j+2] = '-';
-								 dispMaze[(sizeMaze[0]+1)*2][4*j+3] = '-';
+					case "wall": dispMaze[0][4*j]   = '+';
+								 dispMaze[0][4*j+1] = '-';
+								 dispMaze[0][4*j+2] = '-';
+								 dispMaze[0][4*j+3] = '-';
 								 break;
 						
 
-					case "no"  : dispMaze[(sizeMaze[0]+1)*2][4*j]   = '+';
-								 dispMaze[(sizeMaze[0]+1)*2][4*j+1] = ' ';
-								 dispMaze[(sizeMaze[0]+1)*2][4*j+2] = ' ';
-								 dispMaze[(sizeMaze[0]+1)*2][4*j+3] = ' ';
+					case "no"  : dispMaze[0][4*j]   = '+';
+								 dispMaze[0][4*j+1] = ' ';
+								 dispMaze[0][4*j+2] = ' ';
+								 dispMaze[0][4*j+3] = ' ';
 								 break;
 					default: System.err.println("Unknown Type of wall");
 					}
@@ -118,34 +118,35 @@ public class ReadsMazeFile {
 
 				switch (mazeElementNorth)//Action depending on the type of wall
 				{
-				case "wall": dispMaze[i*2][4*j]   = '+';
-							 dispMaze[i*2][4*j+1] = '-';
-							 dispMaze[i*2][4*j+2] = '-';
-							 dispMaze[i*2][4*j+3] = '-';
+				case "wall": dispMaze[(sizeMaze[0]+1)*2-(i*2)][4*j]   = '+';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2)][4*j+1] = '-';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2)][4*j+2] = '-';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2)][4*j+3] = '-';
 							 break;
 
-				case "no":   dispMaze[i*2][4*j]   = '+';
-							 dispMaze[i*2][4*j+1] = ' ';
-							 dispMaze[i*2][4*j+2] = ' ';
-							 dispMaze[i*2][4*j+3] = ' ';
+				case "no":   dispMaze[(sizeMaze[0]+1)*2-(i*2)][4*j]   = '+';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2)][4*j+1] = ' ';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2)][4*j+2] = ' ';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2)][4*j+3] = ' ';
 							 break;
 				default: System.err.println("Unknown Type of wall");
 				}
 				switch (mazeElementWest)//Action depending on the type of wall
 				{
-				case "wall": dispMaze[i*2+1][4*j]   = '|';
-							 dispMaze[i*2+1][4*j+1] = ' ';
-							 dispMaze[i*2+1][4*j+2] = ' ';
-							 dispMaze[i*2+1][4*j+3] = ' ';
+				case "wall": dispMaze[(sizeMaze[0]+1)*2-(i*2+1)][4*j]   = '|';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2+1)][4*j+1] = ' ';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2+1)][4*j+2] = ' ';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2+1)][4*j+3] = ' ';
 							 break;
 							 
-				case "no":   dispMaze[i*2+1][4*j]   = ' ';
-							 dispMaze[i*2+1][4*j+1] = ' ';
-							 dispMaze[i*2+1][4*j+2] = ' ';
-							 dispMaze[i*2+1][4*j+3] = ' ';
+				case "no":   dispMaze[(sizeMaze[0]+1)*2-(i*2+1)][4*j]   = ' ';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2+1)][4*j+1] = ' ';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2+1)][4*j+2] = ' ';
+							 dispMaze[(sizeMaze[0]+1)*2-(i*2+1)][4*j+3] = ' ';
 							 break;
 				default: System.err.println("Unknown Type of wall");
 				}
+				
 				if (j == sizeMaze[0])// if the last column is reach take into account the Eastern wall
 				{
 					dispMaze[i*2][(sizeMaze[0]+1)*4]   = '+';//add a "+" one line out of two
@@ -162,7 +163,7 @@ public class ReadsMazeFile {
 				}	
 			}
 		}
-		dispMaze[1+0*2][2+0*4] = 'S';// Place the Starting point
+		dispMaze[1+0*2][0] = 'S';// Place the Starting point
 		dispMaze[1+sizeMaze[0]*2][2+sizeMaze[0]*4] = 'E';// Place the end point 
 		return (dispMaze);
 	}
