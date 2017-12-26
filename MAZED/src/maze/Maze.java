@@ -10,9 +10,9 @@ public class Maze {
 	
 	public String name;//Contain the name of the maze to later write it in the high score txt file
 	private final ArrayList <ArrayList<String>> description;//Contain the description of the Maze
-	private final char[][] dispMaze;//Contain the "picture" of the maze 
-	public static final int [] START_POS = {0,0};
-	public static int[] endPos = {0,0};
+	private char[][] dispMaze;//Contain the "picture" of the maze 
+	private static final int [] START_POS = {0,0};
+	private static int[]  END_POS={0,0};
 	
 	// Let us create a constructor
 	Maze(String mazeName, ArrayList <ArrayList<String>> mazeDescription, char[][] displayOfMaze )
@@ -21,8 +21,8 @@ public class Maze {
 		this.name = mazeName;
 		this.description = mazeDescription;
 		this.dispMaze = displayOfMaze;
-		endPos[0] = Integer.parseInt(mazeDescription.get(mazeDescription.size()-1).get(0));
-		endPos[1] = Integer.parseInt(mazeDescription.get(mazeDescription.size()-1).get(0));		
+		END_POS[0] = Integer.parseInt(mazeDescription.get(mazeDescription.size()-1).get(0));
+		END_POS[1] = Integer.parseInt(mazeDescription.get(mazeDescription.size()-1).get(0));		
 	}
 	
 	//Let us create a method to dipslay/refresh the maze. The function takes into account the player position
@@ -30,20 +30,24 @@ public class Maze {
 	
 	{			
 			mazeConsole.clearText();
+			int sizeMazeY = this.dispMaze.length;
+			//int sizeMazeX = this.dispMaze[0].length;
+					
+					//((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j]
 			switch (playerPositions.size()) {
 				case 1:{
-					this.dispMaze[1+(int) playerPositions.get(0).getY()*2][2+(int) playerPositions.get(0).getX()*4] = 'P';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getY()*2 + 1)][2 + (int) playerPositions.get(0).getX() * 4] = 'P';
 					break;
 				}
 				case 2:{
-					this.dispMaze[1+(int) playerPositions.get(0).getY()*2][2+(int) playerPositions.get(0).getX()*4] = 'S';
-					this.dispMaze[1+(int) playerPositions.get(1).getY()*2][2+(int) playerPositions.get(1).getX()*4] = 'P';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getY()*2 + 1)][2 + (int) playerPositions.get(0).getX() * 4] = 'S';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(1).getY()*2 + 1)][2 + (int) playerPositions.get(1).getX() * 4] = 'P';
 					break;
 				}
 				default:{
-					this.dispMaze[1+(int) playerPositions.get(0).getY()*2][2+(int) playerPositions.get(0).getX()*4] = 'S';
-					this.dispMaze[1+(int) playerPositions.get(playerPositions.size()-2).getY()*2][2+(int) playerPositions.get(playerPositions.size()-2).getX()*4] = ' ';
-					this.dispMaze[1+(int) playerPositions.get(playerPositions.size()-1).getY()*2][2+(int) playerPositions.get(playerPositions.size()-1).getX()*4] = 'P';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getY()*2 + 1)][2 + (int) playerPositions.get(0).getX() * 4] = 'S';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(playerPositions.size()-2).getY()*2 + 1)][2 + (int) playerPositions.get(playerPositions.size()-2).getX() * 4] = ' ';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(playerPositions.size()-1).getY()*2 + 1)][2 + (int) playerPositions.get(playerPositions.size()-1).getX() * 4] = 'P';
 				}
 				
 			}
@@ -107,7 +111,12 @@ public class Maze {
 		return this.dispMaze;
 	}
 
-
+	public int[] getEndMaze() {
+		return END_POS;
+	}
+	public int[] getStartMaze() {
+		return START_POS;
+	}
 
 
 }
