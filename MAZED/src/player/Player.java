@@ -52,7 +52,7 @@ public class Player {
 			}
 			double yPos = this.currentPosition.getY();
 			double xPos = this.currentPosition.getX();
-			yPos +=1;
+			xPos +=1;
 
 
 			this.currentPosition.setLocation(xPos, yPos);
@@ -68,7 +68,7 @@ public class Player {
 			}
 			double yPos = this.currentPosition.getY();
 			double xPos = this.currentPosition.getX();
-			xPos -=1;
+			yPos -=1;
 
 			this.currentPosition.setLocation(xPos, yPos);
 			newPos.add(new Point2D.Double(xPos,yPos));
@@ -84,7 +84,7 @@ public class Player {
 			double yPos = this.currentPosition.getY();
 			double xPos = this.currentPosition.getX();
 
-			xPos +=1;
+			yPos +=1;
 			this.currentPosition.setLocation(xPos, yPos);
 			newPos.add(new Point2D.Double(xPos,yPos));
 			this.positions = newPos;
@@ -99,7 +99,7 @@ public class Player {
 			double yPos = this.currentPosition.getY();
 			double xPos = this.currentPosition.getX();
 
-			yPos -=1;
+			xPos -=1;
 			this.currentPosition.setLocation(xPos, yPos);
 			newPos.add(new Point2D.Double(xPos,yPos));
 			this.positions = newPos;
@@ -146,25 +146,30 @@ public class Player {
 			break;
 		}
 		case "Left":{
-				int indexWall = 4;
+				int indexWall = 5;
 				String mazeElem = myMaze.getMazeDescription(index,indexWall);
 				switch (mazeElem) {
 				case "wall":
-					canMove =  false;
+							canMove =  false;
+							break;
+					
 				case "no":
-					canMove =  true;
+							canMove =  true;
+							break;
 				}
 				break;
 		}
 		
 		case "Right":{
-			int indexWall = 5;
+			int indexWall = 4;
 			String mazeElem = myMaze.getMazeDescription(index,indexWall);
 			switch (mazeElem) {
 			case "wall":
-				canMove =  false;
+						canMove =  false;
+						break;
 			case "no":
-				canMove =  true;
+						canMove =  true;
+						break;
 			}
 			break;
 		}

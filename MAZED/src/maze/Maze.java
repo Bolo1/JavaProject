@@ -36,18 +36,18 @@ public class Maze {
 					//((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j]
 			switch (playerPositions.size()) {
 				case 1:{
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getY()*2 + 1)][2 + (int) playerPositions.get(0).getX() * 4] = 'P';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getX()*2 + 1)][2 + (int) playerPositions.get(0).getY() * 4] = 'P';
 					break;
 				}
 				case 2:{
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getY()*2 + 1)][2 + (int) playerPositions.get(0).getX() * 4] = 'S';
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(1).getY()*2 + 1)][2 + (int) playerPositions.get(1).getX() * 4] = 'P';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getX()*2 + 1)][2 + (int) playerPositions.get(0).getY() * 4] = 'S';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(1).getX()*2 + 1)][2 + (int) playerPositions.get(1).getY() * 4] = 'P';
 					break;
 				}
 				default:{
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getY()*2 + 1)][2 + (int) playerPositions.get(0).getX() * 4] = 'S';
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(playerPositions.size()-2).getY()*2 + 1)][2 + (int) playerPositions.get(playerPositions.size()-2).getX() * 4] = ' ';
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(playerPositions.size()-1).getY()*2 + 1)][2 + (int) playerPositions.get(playerPositions.size()-1).getX() * 4] = 'P';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getX()*2 + 1)][2 + (int) playerPositions.get(0).getY() * 4] = 'S';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(playerPositions.size()-2).getX()*2 + 1)][2 + (int) playerPositions.get(playerPositions.size()-2).getY() * 4] = ' ';
+					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(playerPositions.size()-1).getX()*2 + 1)][2 + (int) playerPositions.get(playerPositions.size()-1).getY() * 4] = 'P';
 				}
 				
 			}
