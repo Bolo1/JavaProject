@@ -2,6 +2,10 @@ package player;
 import miscellaneousItem.Item;
 
 import java.awt.geom.Point2D;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,78 +110,78 @@ public class Player {
 			break;}
 		}
 	}
-	
+
 	public boolean canMove(String dir, Maze myMaze) {
-		
+
 		int indexX = (int) this.currentPosition.getX();
 		int indexY = (int) this.currentPosition.getY();
-		int sizeMaze = myMaze.getEndMaze()[0];
+		int sizeMaze = myMaze.getSizeMaze()[0];
 		int index = 1 + indexX * (sizeMaze + 1) + indexY;
 		boolean canMove = false;
 		switch (dir) {
-		
+
 		case "Up":{
 			int indexWall = 2;
 			String mazeElem = myMaze.getMazeDescription(index,indexWall);
 			switch (mazeElem) {
 			case "wall":
-						canMove =  false;
-						break;
+				canMove =  false;
+				break;
 			case "no":
-						canMove =  true;
-						break;
+				canMove =  true;
+				break;
 			}
 			break;
-			}
-			
-			
+		}
+
+
 		case "Down":{
 			int indexWall = 3;
 			String mazeElem = myMaze.getMazeDescription(index,indexWall);
 			switch (mazeElem) {
 			case "wall":
-						canMove =  false;
-						break;
+				canMove =  false;
+				break;
 			case "no":
-						canMove =  true;
-						break;
-				
+				canMove =  true;
+				break;
+
 			}
 			break;
 		}
 		case "Left":{
-				int indexWall = 5;
-				String mazeElem = myMaze.getMazeDescription(index,indexWall);
-				switch (mazeElem) {
-				case "wall":
-							canMove =  false;
-							break;
-					
-				case "no":
-							canMove =  true;
-							break;
-				}
+			int indexWall = 5;
+			String mazeElem = myMaze.getMazeDescription(index,indexWall);
+			switch (mazeElem) {
+			case "wall":
+				canMove =  false;
 				break;
+
+			case "no":
+				canMove =  true;
+				break;
+			}
+			break;
 		}
-		
+
 		case "Right":{
 			int indexWall = 4;
 			String mazeElem = myMaze.getMazeDescription(index,indexWall);
 			switch (mazeElem) {
 			case "wall":
-						canMove =  false;
-						break;
+				canMove =  false;
+				break;
 			case "no":
-						canMove =  true;
-						break;
+				canMove =  true;
+				break;
 			}
 			break;
 		}
 		default :
 			canMove =  false;
-	}
-		return canMove;
 		}
+		return canMove;
+	}
 
 	public ArrayList<Item> getPlayerInventory(){
 		return (this.inventory);
@@ -185,5 +189,17 @@ public class Player {
 	}
 	public int getPlayerSight() {
 		return lineOfSight;
+	}
+	
+	public void printPlayerScore(int steps,Maze MyMaze) {
+		try (
+			FileWriter fileW   = new FileWriter("HighScores.txt",true);
+			BufferedWriter bufferW = new BufferedWriter(fileW);
+			PrintWriter printerW = new PrintWriter(bufferW);){
+			printerW.println(this.getPlayerName() + ","+MyMaze.name+","+steps);
+		}catch(IOException i) {
+			i.printStackTrace();
+		}
+			
 	}
 }

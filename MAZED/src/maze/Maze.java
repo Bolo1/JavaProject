@@ -11,8 +11,9 @@ public class Maze {
 	public String name;//Contain the name of the maze to later write it in the high score txt file
 	private final ArrayList <ArrayList<String>> description;//Contain the description of the Maze
 	private char[][] dispMaze;//Contain the "picture" of the maze 
-	private static final int [] START_POS = {0,0};
-	private static int[]  END_POS={0,0};
+	private  int [] startPos= {0,0};
+	private  int[]  endPos={0,0};
+	private int[] sizeMaze= {0,0};
 	
 	// Let us create a constructor
 	Maze(String mazeName, ArrayList <ArrayList<String>> mazeDescription, char[][] displayOfMaze )
@@ -21,8 +22,9 @@ public class Maze {
 		this.name = mazeName;
 		this.description = mazeDescription;
 		this.dispMaze = displayOfMaze;
-		END_POS[0] = Integer.parseInt(mazeDescription.get(mazeDescription.size()-1).get(0));
-		END_POS[1] = Integer.parseInt(mazeDescription.get(mazeDescription.size()-1).get(0));		
+		endPos = setEndPos();
+		startPos = setStartPos();
+		sizeMaze = setSizeMaze();
 	}
 	
 	//Let us create a method to dipslay/refresh the maze. The function takes into account the player position
@@ -112,11 +114,56 @@ public class Maze {
 	}
 
 	public int[] getEndMaze() {
-		return END_POS;
+		return endPos;
 	}
 	public int[] getStartMaze() {
-		return START_POS;
+		return startPos;
 	}
-
+	
+	public int[] setEndPos() {
+		int sizeMazeX = this.description.get(0).size();
+		int sizeMazeY = this.description.size();
+		int[] endPos={0,0};
+		for (int i=0; i<sizeMazeY; i++) {
+			String mazeElem = this.description.get(i).get(sizeMazeX-1);
+			switch (mazeElem) {
+			case "E": endPos[0] = Integer.parseInt(this.description.get(i).get(0));
+					  endPos[1] = Integer.parseInt(this.description.get(i).get(1));
+			break;	
+			default:
+			break;
+			}
+		}
+		return endPos;
+	}
+	
+	public int[] setStartPos() {
+		int sizeMazeX = this.description.get(0).size();
+		int sizeMazeY = this.description.size();
+		int[] startPos={0,0};
+		for (int i=0; i<sizeMazeY; i++) {
+			String mazeElem = this.description.get(i).get(sizeMazeX-1);
+			switch (mazeElem) {
+			case "S":
+				startPos[0] = Integer.parseInt(this.description.get(i).get(0));
+				startPos[1] = Integer.parseInt(this.description.get(i).get(1));
+			break;
+			default:
+			break;
+			}
+		}
+		return startPos;
+	}
+	
+	public int[] setSizeMaze() {
+		int sizeMazeY  = this.description.size();
+		int[] sizeMaze = {Integer.parseInt(this.description.get(sizeMazeY-1).get(0)),Integer.parseInt(this.description.get(sizeMazeY-1).get(1))};
+ 		return sizeMaze;
+	}
+	
+	public int[] getSizeMaze() {
+		return this.sizeMaze;
+	}
+	
 
 }
