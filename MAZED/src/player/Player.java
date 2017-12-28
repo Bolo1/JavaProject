@@ -1,5 +1,6 @@
 package player;
 import miscellaneousItem.Item;
+import userInterface.TextArea;
 
 import java.awt.geom.Point2D;
 import java.io.BufferedWriter;
@@ -108,30 +109,30 @@ public class Player {
 		}
 	}
 
-	public boolean canMove(String dir, Maze myMaze) {
+	public boolean canMove(String dir, Maze myMaze, TextArea mazeText) {
 
 		boolean canMove = false;
 		switch (dir) {
 
 		case "Up":{
 			int indexWall = 2;
-			canMove=checkWall(myMaze,indexWall);
+			canMove=checkWall(myMaze,indexWall,dir,mazeText);
 			break;
 		}
 		case "Down":{
 			int indexWall = 3;
-			canMove=checkWall(myMaze,indexWall);
+			canMove=checkWall(myMaze,indexWall,dir,mazeText);
 			break;
 		}
 		case "Left":{
 			int indexWall = 5;
-			canMove=checkWall(myMaze,indexWall);
+			canMove=checkWall(myMaze,indexWall,dir,mazeText);
 			break;
 		}
 
 		case "Right":{
 			int indexWall = 4;
-			canMove=checkWall(myMaze,indexWall);
+			canMove=checkWall(myMaze,indexWall,dir,mazeText);
 			break;
 		}
 		default :
@@ -165,13 +166,13 @@ public class Player {
 
 	}
 
-	public boolean checkWall(Maze myMaze, int indexWall) {
+	public boolean checkWall(Maze myMaze, int indexWall, String dir, TextArea mazeText) {
 		
 		int indexX = (int) this.currentPosition.getX();
 		int indexY = (int) this.currentPosition.getY();
 		int sizeMaze = myMaze.getSize()[0];
-		int index = 1 + indexX * (sizeMaze + 1) + indexY;
-		String mazeElem = myMaze.getDescription(index,indexWall);
+		int index1 = 1 + indexX * (sizeMaze + 1) + indexY;
+		String mazeElem = myMaze.getDescription(index1,indexWall);
 		boolean canMove = false;
 		
 		switch (mazeElem) {
@@ -190,10 +191,54 @@ public class Player {
 
 		case "breakable":
 			canMove = searchInventory("Hammer");
+			if (canMove) {
+				switch (dir) {
+				
+				case "Up":{
+					myMaze.modDescription(index1, indexWall, "no");
+					int index2 = 1 + (indexX-1) * (sizeMaze + 1) + indexY;
+					int index3 = 3;
+					myMaze.modDescription(index2, index3, "no");
+					break;
+				}
+				
+				case "Down":{
+					myMaze.modDescription(index1, indexWall, "no");
+					int index2 = 1 + (indexX-1) * (sizeMaze + 1) + indexY;
+					int index3 = 2;
+					myMaze.modDescription(index2, index3, "no");
+					break;
+				}
+				
+				case "Left":{
+					myMaze.modDescription(index1, indexWall, "no");
+					int index2 = 1 + indexX * (sizeMaze + 1) + indexY-1;
+					int index3 = 4;
+					myMaze.modDescription(index2, index3, "no");
+					break;
+				}
+				
+				case "Right":{
+					myMaze.modDescription(index1, indexWall, "no");
+					int index2 = 1 + indexX * (sizeMaze + 1) + indexY+1;
+					int index3 = 5;
+					myMaze.modDescription(index2, index3, "no");
+					break;
+				}
+			    }
+				
+			}else {
+				//mazeText.updateText("You need a Hammer to break this wall");
+			}
+			
 			break;
 
 		case "door":
 			canMove = searchInventory("Key");
+			//if (!canMove) {
+				//mazeText.clearText();
+				//mazeText.updateText("You need a key to open this door");
+			//}
 			break;
 		}
 		return canMove;
@@ -234,6 +279,15 @@ public class Player {
 			}
 		}
 		return counter;
+	}
+	public int scoreInventory() {
+		
+		int sizeInv = this.inventory.size();
+		int score = 0;
+		for(int i=0;i<sizeInv;i++) {
+			score = score + this.inventory.get(i).getScoreVal();
+		}
+		return score;
 	}
 
 	public void useItem(Item item2use) {

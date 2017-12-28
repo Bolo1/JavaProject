@@ -24,7 +24,7 @@ public class MazeMain {
 		//frame.pack();
 		frame.setVisible(true);
 		//Intro Text on UI
-		frame.mazeText.updateText(" Hello, you are the Prince of Persia, right? I was waiting for you,\nwhat is your name again ? ");
+		frame.mazeText.updateText("Hello, you are the Prince of Persia, right? I was waiting for you,\nwhat is your name again ? ");
 		
 		//Open dialog for name
 		String input = JOptionPane.showInputDialog(
@@ -42,8 +42,8 @@ public class MazeMain {
 		File mazeFile = new File("mazeEscape.txt");
 		String fileName = mazeFile.getName().substring(0, mazeFile.getName().lastIndexOf('.'));
 		//Call the read method from the class ReadsMazeFile giving the path of the file as input and store it in an 2D array list of string
-		ArrayList <ArrayList<String>> mazeDescription = ReadsMazeFile.read(mazeFile.getAbsolutePath());
-		char [][] displayOfMaze = ReadsMazeFile.mazeToChar(mazeDescription);
+		ArrayList <ArrayList<String>> mazeDescription =Maze.read(mazeFile.getAbsolutePath());
+		char [][] displayOfMaze = Maze.toChar(mazeDescription);
 		Maze myMaze = new Maze (fileName,mazeDescription,displayOfMaze);
 
 		//display maze on console and on UI
@@ -51,28 +51,35 @@ public class MazeMain {
 		myMaze.display(player.getPosition(),frame.mazeConsole);
 
 		int delay = 500; //Refresh game every 0.5 sec
-
+		
+		int score = (myMaze.getSize()[0]+1)*(myMaze.getSize()[1]+1);
+		
 		// Game is played with a timer
 		final Timer gameTimer = new Timer(delay,null);
 		gameTimer.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent evt) {
+				
 				//First task check if button was pressed
 				if (frame.buttonListener.getWasPressed()!="") {
 					//Then check if player is allowed to move in that direction
-					if (player.canMove(frame.buttonListener.getWasPressed(),myMaze)){
+					if (player.canMove(frame.buttonListener.getWasPressed(),myMaze,frame.mazeText)){
 						// Move player
 						player.move(frame.buttonListener.getWasPressed(), myMaze.getDescription());
 					}else {}
+					
+					int nbOfSteps  = (int) player.getPosition().size()-1;
+					int newScore   = score-nbOfSteps + player.scoreInventory();
 					frame.mazeText.clearText();
-					frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  (int) (player.getPosition().size()-1));
+					frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  nbOfSteps+"\nScore: "+newScore);
 					frame.buttonListener.resetWasPressed();					
 					myMaze.display(player.getPosition(), frame.mazeConsole);
 
 				}
-				int nbOfSteps = (int) player.getPosition().size()-1;
+				int nbOfSteps  = (int) player.getPosition().size()-1;
+				int newScore   = score-nbOfSteps + player.scoreInventory();
 				int xPosPlayer = (int) player.getPosition().get(nbOfSteps).getX();
 				int yPosPlayer = (int) player.getPosition().get(nbOfSteps).getY();
-				String object = myMaze.getDescription(1+xPosPlayer*(myMaze.getSize()[0]+1)+yPosPlayer,myMaze.getNElemDesc()-1);
+				String object  = myMaze.getDescription(1+xPosPlayer*(myMaze.getSize()[0]+1)+yPosPlayer,myMaze.getNElemDesc()-1);
 
 				switch (object) {
 				case "no":
@@ -81,7 +88,7 @@ public class MazeMain {
 					break;
 				case "E":
 					frame.mazeText.clearText();
-					frame.mazeText.updateText("You managed to escape the Dahaka ! In only "+nbOfSteps + " steps."); 
+					frame.mazeText.updateText("You managed to escape the Dahaka ! In only "+nbOfSteps + " steps.\nYour score is "+ newScore); 
 					player.printScore(nbOfSteps, myMaze);
 					gameTimer.stop();//End game if players arrived at Exit
 					break;
@@ -90,15 +97,15 @@ public class MazeMain {
 					Item item = new Item(object,player);
 					player.pickUpItem(item, myMaze);
 					frame.mazeText.clearText();
-					frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + nbOfSteps+"\nYou Picked up a "+ item.getType());
+					frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + nbOfSteps+ "\nScore: "+newScore+"\nYou Picked up a "+ item.getType());
 					break;
-				}					
+				}	
+				
 
 			}
 		});
 
 		gameTimer.start();
-
 	}
 
 

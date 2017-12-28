@@ -1,5 +1,7 @@
 package miscellaneousItem;
 
+import java.util.Random;
+
 import player.Player;
 
 public class Item {
@@ -16,7 +18,8 @@ public class Item {
 			
 		case "C":
 			this.type ="Trophy";
-			this.scoreValue=15;
+			Random rand =new Random();
+			this.scoreValue=rand.nextInt(40)+11;
 			break;
 			
 		case "H":
