@@ -25,7 +25,7 @@ public class Item {
 			break;
 			
 		case "L":
-			this.type ="Light";
+			this.type ="Torch";
 			this.scoreValue=0;
 			player.increaseSight(2);
 			break;

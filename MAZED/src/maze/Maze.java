@@ -9,11 +9,12 @@ import userInterface.TextArea;
 public class Maze {
 	
 	public String name;//Contain the name of the maze to later write it in the high score txt file
-	private final ArrayList <ArrayList<String>> description;//Contain the description of the Maze
+	private ArrayList <ArrayList<String>> description;//Contain the description of the Maze
 	private char[][] dispMaze;//Contain the "picture" of the maze 
 	private  int [] startPos= {0,0};
 	private  int[]  endPos={0,0};
 	private int[] sizeMaze= {0,0};
+	private int nElemDesc = 0;
 	
 	// Let us create a constructor
 	Maze(String mazeName, ArrayList <ArrayList<String>> mazeDescription, char[][] displayOfMaze )
@@ -25,6 +26,7 @@ public class Maze {
 		endPos = setEndPos();
 		startPos = setStartPos();
 		sizeMaze = setSize();
+		nElemDesc = this.description.get(0).size();
 	}
 	
 	//Let us create a method to dipslay/refresh the maze. The function takes into account the player position
@@ -64,27 +66,7 @@ public class Maze {
 			}		
 		
 		}
-			
-//	public void displayMaze(ArrayList<int[]> arrayList, TextArea mazeConsole)
-//	{
-//
-//		
-//			mazeConsole[1+arrayList[0]*2][2+arrayList[1]*4] = 'P';
-//		
-//		
-//			for (char[] u:mazeConsole)
-//			{
-//				String toPrint ="";
-//				for(char v:u)
-//				{
-//					 toPrint =toPrint+v;
-//				}
-//				System.out.println(toPrint);
-//				
-//			}
-//			
-//		}
-//			
+					
 	public void display()
 	{
 		
@@ -102,6 +84,10 @@ public class Maze {
 	public  String getDescription(int index1, int index2){
 		
 		return this.description.get(index1).get(index2);
+	}
+	
+	public void modDescription(int index1, int index2, String mod) {
+		this.description.get(index1).set(index2,mod);
 	}
 	
 	public ArrayList<ArrayList<String>> getDescription () {
@@ -165,5 +151,8 @@ public class Maze {
 		return this.sizeMaze;
 	}
 	
+	public int getNElemDesc() {
+		return this.nElemDesc;
+	}
 
 }

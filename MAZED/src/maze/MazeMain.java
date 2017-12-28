@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
+import miscellaneousItem.Item;
+
 public class MazeMain {
 	public static void initGame()
 	{
@@ -60,12 +62,9 @@ public class MazeMain {
 					if (player.canMove(frame.buttonListener.getWasPressed(),myMaze)){
 						// Move player
 						player.move(frame.buttonListener.getWasPressed(), myMaze.getDescription());
-						int nbOfSteps = (int) player.getPosition().size()-1;
-						frame.mazeText.clearText();
-						frame.mazeText.updateText("Inventory: Empty\nNumber of Steps: " + nbOfSteps);
-
 					}else {}
-
+					frame.mazeText.clearText();
+					frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  (int) (player.getPosition().size()-1));
 					frame.buttonListener.resetWasPressed();					
 					myMaze.display(player.getPosition(), frame.mazeConsole);
 
@@ -73,14 +72,27 @@ public class MazeMain {
 				int nbOfSteps = (int) player.getPosition().size()-1;
 				int xPosPlayer = (int) player.getPosition().get(nbOfSteps).getX();
 				int yPosPlayer = (int) player.getPosition().get(nbOfSteps).getY();
+				String object = myMaze.getDescription(1+xPosPlayer*(myMaze.getSize()[0]+1)+yPosPlayer,myMaze.getNElemDesc()-1);
 
-				if (xPosPlayer == myMaze.getEnd()[0] & yPosPlayer == myMaze.getEnd()[1]) {
-					int bestSteps = 8;
+				switch (object) {
+				case "no":
+					break;
+				case "S":
+					break;
+				case "E":
 					frame.mazeText.clearText();
-					frame.mazeText.updateText("You managed to escape the Dahaka ! In only "+nbOfSteps + " steps. The best score till now is " + bestSteps +" steps"); 
+					frame.mazeText.updateText("You managed to escape the Dahaka ! In only "+nbOfSteps + " steps."); 
 					player.printScore(nbOfSteps, myMaze);
 					gameTimer.stop();//End game if players arrived at Exit
-				}
+					break;
+					
+				default:
+					Item item = new Item(object,player);
+					player.pickUpItem(item, myMaze);
+					frame.mazeText.clearText();
+					frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + nbOfSteps+"\nYou Picked up a "+ item.getType());
+					break;
+				}					
 
 			}
 		});

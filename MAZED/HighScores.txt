@@ -2,3 +2,4 @@ PLAYERNAME,MAZENAME,NUMBER_OF_STEPS_SOLVED
 Boris,MazeLvl1,9
 Boris,MazeLvl1,9
 Boris,MazeLvl1,8
+Boris,mazeEscape,36

@@ -199,8 +199,12 @@ public class Player {
 		return canMove;
 	}
 
-	public void pickUpItem(Item item2Pick) {
+	public void pickUpItem(Item item2Pick, Maze myMaze) {
 		this.inventory.add(item2Pick);
+		int index1 = 1+(int)this.currentPosition.getX()*(myMaze.getSize()[0]+1)+(int) this.currentPosition.getY();
+		int index2 = myMaze.getNElemDesc()-1;
+		myMaze.modDescription(index1, index2, "no");
+		
 	}
 	public boolean searchInventory(String type) {
 		int sizeInv = this.inventory.size();
@@ -211,6 +215,14 @@ public class Player {
 			}
 		}
 		return isInInv;
+	}
+	public String displayInventory() {
+		int sizeInv = this.inventory.size();
+		String disp="";
+		for(int i=0;i<sizeInv;i++) {
+			disp = disp+this.inventory.get(i).getType()+", ";
+		}
+		return disp;
 	}
 
 	public int countInventory(String type) {
