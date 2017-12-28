@@ -45,6 +45,4 @@ public class Item {
 	public int getScoreVal() {
 		return this.scoreValue;
 	}
-	
-
 }

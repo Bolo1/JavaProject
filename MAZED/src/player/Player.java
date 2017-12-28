@@ -21,7 +21,6 @@ public class Player {
 	{
 		this.name = playerName;
 		this.currentPosition = playerPosition;
-
 		this.positions.add(this.currentPosition);
 	}
 
@@ -52,8 +51,8 @@ public class Player {
 			{
 				newPos.add(new Point2D.Double(this.positions.get(i).getX(),this.positions.get(i).getY()));
 			}
-			double yPos = this.currentPosition.getY();
-			double xPos = this.currentPosition.getX();
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
 			xPos +=1;
 
 
@@ -68,8 +67,8 @@ public class Player {
 			{
 				newPos.add(new Point2D.Double(this.positions.get(i).getX(),this.positions.get(i).getY()));
 			}
-			double yPos = this.currentPosition.getY();
-			double xPos = this.currentPosition.getX();
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
 			yPos -=1;
 
 			this.currentPosition.setLocation(xPos, yPos);
@@ -83,9 +82,9 @@ public class Player {
 			{
 				newPos.add(new Point2D.Double(this.positions.get(i).getX(),this.positions.get(i).getY()));
 			}
-			double yPos = this.currentPosition.getY();
-			double xPos = this.currentPosition.getX();
-
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
+			
 			yPos +=1;
 			this.currentPosition.setLocation(xPos, yPos);
 			newPos.add(new Point2D.Double(xPos,yPos));
@@ -98,8 +97,8 @@ public class Player {
 			{
 				newPos.add(new Point2D.Double(this.positions.get(i).getX(),this.positions.get(i).getY()));
 			}
-			double yPos = this.currentPosition.getY();
-			double xPos = this.currentPosition.getX();
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
 
 			xPos -=1;
 			this.currentPosition.setLocation(xPos, yPos);
@@ -111,69 +110,28 @@ public class Player {
 
 	public boolean canMove(String dir, Maze myMaze) {
 
-		int indexX = (int) this.currentPosition.getX();
-		int indexY = (int) this.currentPosition.getY();
-		int sizeMaze = myMaze.getSize()[0];
-		int index = 1 + indexX * (sizeMaze + 1) + indexY;
 		boolean canMove = false;
 		switch (dir) {
 
 		case "Up":{
 			int indexWall = 2;
-			String mazeElem = myMaze.getDescription(index,indexWall);
-			switch (mazeElem) {
-			case "wall":
-				canMove =  false;
-				break;
-			case "no":
-				canMove =  true;
-				break;
-			}
+			canMove=checkWall(myMaze,indexWall);
 			break;
 		}
 		case "Down":{
 			int indexWall = 3;
-			String mazeElem = myMaze.getDescription(index,indexWall);
-			switch (mazeElem) {
-			
-			case "wall":
-				canMove =  false;
-				break;
-				
-			case "no":
-				canMove =  true;
-				break;
-			}
+			canMove=checkWall(myMaze,indexWall);
 			break;
 		}
 		case "Left":{
 			int indexWall = 5;
-			String mazeElem = myMaze.getDescription(index,indexWall);
-			switch (mazeElem) {
-			
-			case "wall":
-				canMove =  false;
-				break;
-
-			case "no":
-				canMove =  true;
-				break;
-			}
+			canMove=checkWall(myMaze,indexWall);
 			break;
 		}
 
 		case "Right":{
 			int indexWall = 4;
-			String mazeElem = myMaze.getDescription(index,indexWall);
-			switch (mazeElem) {
-			case "wall":
-				canMove =  false;
-				break;
-			
-			case "no":
-				canMove =  true;
-				break;
-			}
+			canMove=checkWall(myMaze,indexWall);
 			break;
 		}
 		default :
@@ -186,28 +144,107 @@ public class Player {
 		return (this.inventory);
 
 	}
-	
+
 	public int getSight() {
 		return lineOfSight;
 	}
-	
+
 	public void increaseSight(int bonus) {
 		this.lineOfSight+=bonus;
 	}
-	
+
 	public void printScore(int steps,Maze MyMaze) {
 		try (
-			FileWriter fileW   = new FileWriter("HighScores.txt",true);
-			BufferedWriter bufferW = new BufferedWriter(fileW);
-			PrintWriter printerW = new PrintWriter(bufferW);){
+				FileWriter fileW   = new FileWriter("HighScores.txt",true);
+				BufferedWriter bufferW = new BufferedWriter(fileW);
+				PrintWriter printerW = new PrintWriter(bufferW);){
 			printerW.println(this.getName() + ","+MyMaze.name+","+steps);
 		}catch(IOException i) {
 			i.printStackTrace();
 		}
-			
+
 	}
-	
-	public void pickUpObject(Item item2Pick) {
+
+	public boolean checkWall(Maze myMaze, int indexWall) {
+		
+		int indexX = (int) this.currentPosition.getX();
+		int indexY = (int) this.currentPosition.getY();
+		int sizeMaze = myMaze.getSize()[0];
+		int index = 1 + indexX * (sizeMaze + 1) + indexY;
+		String mazeElem = myMaze.getDescription(index,indexWall);
+		boolean canMove = false;
+		
+		switch (mazeElem) {
+		
+		case "wall":
+			canMove =  false;
+			break;
+
+		case "no":
+			canMove =  true;
+			break;
+
+		case "fake":
+			canMove = true;
+			break;
+
+		case "breakable":
+			canMove = searchInventory("Hammer");
+			break;
+
+		case "door":
+			canMove = searchInventory("Key");
+			break;
+		}
+		return canMove;
+	}
+
+	public void pickUpItem(Item item2Pick) {
 		this.inventory.add(item2Pick);
+	}
+	public boolean searchInventory(String type) {
+		int sizeInv = this.inventory.size();
+		boolean isInInv = false;
+		for(int i=0;i<sizeInv;i++) {
+			if (type == this.inventory.get(i).getType()) {
+				isInInv = true;
+			}
+		}
+		return isInInv;
+	}
+
+	public int countInventory(String type) {
+		int sizeInv = this.inventory.size();
+		int counter = 0;
+		for(int i=0;i<sizeInv;i++) {
+			if (type == this.inventory.get(i).getType()) {
+				counter++;
+			}
+		}
+		return counter;
+	}
+
+	public void useItem(Item item2use) {
+		switch (item2use.getType()) {
+
+		case "Key":
+			break;
+
+		case "Trophy":
+			break;
+
+		case "Hammer":
+			break;
+
+		case "Light":
+			this.increaseSight(2);
+			break;
+
+		case "Trap":
+			for (int i= 0; i<5;i++) {
+				this.positions.add(this.currentPosition);
+			}
+			break;
+		}
 	}
 }

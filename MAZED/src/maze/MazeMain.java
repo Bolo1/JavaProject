@@ -16,24 +16,27 @@ import javax.swing.Timer;
 public class MazeMain {
 	public static void initGame()
 	{
-
-		//Game Initiation 
-		MainUI frame = new MainUI();//Creation of the UI
+		//UI initiation
+		MainUI frame = new MainUI();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.pack();
 		frame.setVisible(true);
-
+		//Intro Text on UI
 		frame.mazeText.updateText(" Hello, you are the Prince of Persia, right? I was waiting for you,\nwhat is your name again ? ");
+		
+		//Open dialog for name
 		String input = JOptionPane.showInputDialog(
 				null, "Please Enter Your Name");
 		String playerName = input;
 		Point2D playerPosition = new Point2D.Double(0,0);
 		Player player = new Player(playerName,playerPosition);
+		
+		//Follow up intro on UI
 		frame.mazeText.clearText();
 		frame.mazeText.updateText(player.getName() +", the Dahaka put you in a terrible maze full of trap and\ndangers! It is also coming for you ! So hurry up!\n");
 		frame.mazeText.updateText("You need to get out of there ! To help you here is a map of the maze\non which I will update your position.");
 
-
+		//Load, read and set the maze
 		File mazeFile = new File("mazeEscape.txt");
 		String fileName = mazeFile.getName().substring(0, mazeFile.getName().lastIndexOf('.'));
 		//Call the read method from the class ReadsMazeFile giving the path of the file as input and store it in an 2D array list of string
@@ -41,13 +44,13 @@ public class MazeMain {
 		char [][] displayOfMaze = ReadsMazeFile.mazeToChar(mazeDescription);
 		Maze myMaze = new Maze (fileName,mazeDescription,displayOfMaze);
 
-
+		//display maze on console and on UI
 		myMaze.display();
 		myMaze.display(player.getPosition(),frame.mazeConsole);
 
-		int delay = 500;
+		int delay = 500; //Refresh game every 0.5 sec
 
-		// Game is played here:
+		// Game is played with a timer
 		final Timer gameTimer = new Timer(delay,null);
 		gameTimer.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent evt) {
@@ -60,7 +63,7 @@ public class MazeMain {
 						int nbOfSteps = (int) player.getPosition().size()-1;
 						frame.mazeText.clearText();
 						frame.mazeText.updateText("Inventory: Empty\nNumber of Steps: " + nbOfSteps);
-						
+
 					}else {}
 
 					frame.buttonListener.resetWasPressed();					
@@ -83,13 +86,6 @@ public class MazeMain {
 		});
 
 		gameTimer.start();
-
-
-
-
-
-
-
 
 	}
 

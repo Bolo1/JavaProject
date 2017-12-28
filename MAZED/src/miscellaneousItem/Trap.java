@@ -2,14 +2,7 @@ package miscellaneousItem;
 
 
 
-public class Trap extends Item {
+public class Trap {
 
-
-
-	@Override
-	public void use() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

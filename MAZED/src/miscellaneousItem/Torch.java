@@ -1,14 +1,7 @@
 package miscellaneousItem;
 
 
-public class Torch extends Item {
+public class Torch  {
 
-
-
-	@Override
-	public void use() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
