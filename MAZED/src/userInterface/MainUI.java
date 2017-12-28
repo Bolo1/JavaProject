@@ -52,19 +52,12 @@ public class MainUI extends JFrame{
 		
 		//Create a second Text area for displaying console
 		this.mazeText = new TextArea();
-		Dimension minDimText = new Dimension(500,400);
-		Dimension maxDimText = new Dimension(1500,1200);
-		//this.mazeConsole.setPreferredSize(maxDim);
-		this.mazeText.setMaximumSize(maxDimText);
-		this.mazeText.setMinimumSize(minDimText);
+		Dimension prefDimText = new Dimension(800,120);
+		this.mazeText.setPreferredSize(prefDimText);
 		this.mazeText.setBackground(Color.black);
 		this.mazeText.setForeground(Color.white);
 		this.mazeText.setFont( new Font("monospaced", Font.PLAIN, 20) );
-		
-		
 		panelText.add(this.mazeText);
-		
-		
 		
 		//Create a second panel: Main Panel
 		JPanel mainPanel = new JPanel();
@@ -73,21 +66,14 @@ public class MainUI extends JFrame{
 		
 		//Create a second Text area for displaying console
 		this.mazeConsole = new TextArea();
-		Dimension minDim = new Dimension(500,400);
-		Dimension maxDim = new Dimension(2000,1600);
-		//this.mazeConsole.setPreferredSize(maxDim);
-		this.mazeConsole.setMaximumSize(maxDim);
-		this.mazeConsole.setMinimumSize(minDim);
 		this.mazeConsole.setBackground(Color.black);
 		this.mazeConsole.setForeground(Color.white);
-		this.mazeConsole.setFont( new Font("monospaced", Font.PLAIN, 40) );
+		this.mazeConsole.setFont( new Font("monospaced", Font.PLAIN, 15) );
 		this.mazeConsole.setEditable(false);
 		
 		mainPanel.add(this.mazeConsole);
 		
-		
 		//Create a third panel to put buttons
-		
 		JPanel buttonPanel = new JPanel();
 		GridBagLayout layoutButtonPanel = new GridBagLayout();
 		
@@ -102,7 +88,6 @@ public class MainUI extends JFrame{
 		contentPane.add(buttonPanel);
 		
 		// Let us create a button listener
-		
 		this.buttonListener = new MyButtonListener();
 		
 		this.buttonUp = new MyArrowButton ((MyArrowButton.NORTH));
@@ -148,13 +133,4 @@ public class MainUI extends JFrame{
 		buttonPanel.add(this.buttonDown, c);
 		
 	}
-	
-
-	
-	public static void main(String[] args) {
-	
-		
-	}
-	
-
 }

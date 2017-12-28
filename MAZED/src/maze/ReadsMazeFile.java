@@ -19,7 +19,7 @@ public class ReadsMazeFile {
 			//Create a scanner object that will scan lines
 			Scanner scannerFile = new Scanner(file);
 			
-			// Initialize a counter
+			// Initialise a counter
 			int i=0;
 
 			while (scannerFile.hasNextLine()) //Continue until there is no line to read
@@ -102,7 +102,24 @@ public class ReadsMazeFile {
 								 dispMaze[0][4*j+2] = ' ';
 								 dispMaze[0][4*j+3] = ' ';
 								 break;
-					default: System.err.println("Unknown Type of wall");
+								 
+					case "breakable": dispMaze[0][4*j]   = '+';
+									  dispMaze[0][4*j+1] = '-';
+									  dispMaze[0][4*j+2] = 'b';
+									  dispMaze[0][4*j+3] = '-';
+									  break;
+									  
+					case "door":dispMaze[0][4*j]   = '+';
+					  			dispMaze[0][4*j+1] = '-';
+					  			dispMaze[0][4*j+2] = 'd';
+							    dispMaze[0][4*j+3] = '-';
+							    break;
+							    
+					default: dispMaze[0][4*j]   = '+';
+					 dispMaze[0][4*j+1] = '-';
+					 dispMaze[0][4*j+2] = '-';
+					 dispMaze[0][4*j+3] = '-';
+					 break;
 					}
 
 					if (j== sizeMaze[1])//if last column
@@ -128,7 +145,24 @@ public class ReadsMazeFile {
 							 dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+2] = ' ';
 							 dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+3] = ' ';
 							 break;
-				default: System.err.println("Unknown Type of wall");
+							 
+				case "breakable": dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j]   = '+';
+				 				  dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+1] = '-';
+				 				  dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+2] = 'b';
+				 				  dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+3] = '-';
+				 				  break;
+				 
+				case "door": dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j]   = '+';
+				 			 dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+1] = '-';
+				 			 dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+2] = 'd';
+				 			 dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+3] = '-';
+				 			 break;
+				 
+				default: dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j]   = '+';
+				 dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+1] = '-';
+				 dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+2] = '-';
+				 dispMaze[((sizeMaze[0]+1)*2)-(i*2)][4*j+3] = '-';
+				 break;
 				}
 				
 				switch (mazeElementWest)//Action depending on the type of wall
@@ -144,7 +178,23 @@ public class ReadsMazeFile {
 							 dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+2] = ' ';
 							 dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+3] = ' ';
 							 break;
-				default: System.err.println("Unknown Type of wall");
+							 
+				case "breakable": dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j]   = 'b';
+								  dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+1] = ' ';
+								  dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+2] = ' ';
+								  dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+3] = ' ';
+								  break;
+								  
+				case "door": dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j]   = 'd';
+							 dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+1] = ' ';
+							 dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+2] = ' ';
+							 dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+3] = ' ';
+								  break;
+								  
+				default: dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j]   = '|';
+				 dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+1] = ' ';
+				 dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+2] = ' ';
+				 dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][4*j+3] = ' ';
 				}
 				
 				if (j == sizeMaze[0])// if the last column is reach take into account the Eastern wall
@@ -156,12 +206,18 @@ public class ReadsMazeFile {
 					{
 					case "wall": dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][(sizeMaze[0]+1)*4]   = '|';
 						break;
+						
 					case "no"  : dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][(sizeMaze[0]+1)*4]   = ' ';
 						break;
-					default: System.err.println("Unknown Type of wall");
-					}
-					
 						
+					case "breakable": dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][(sizeMaze[0]+1)*4]   = 'b';
+					break;
+					
+					case "door": dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][(sizeMaze[0]+1)*4]   = 'd';
+					break;
+					
+					default: dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][(sizeMaze[0]+1)*4]   = '|';
+					}
 				}
 				//Check For Object
 				

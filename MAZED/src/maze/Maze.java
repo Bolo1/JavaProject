@@ -24,11 +24,11 @@ public class Maze {
 		this.dispMaze = displayOfMaze;
 		endPos = setEndPos();
 		startPos = setStartPos();
-		sizeMaze = setSizeMaze();
+		sizeMaze = setSize();
 	}
 	
 	//Let us create a method to dipslay/refresh the maze. The function takes into account the player position
-	public void displayMaze(List<Point2D> playerPositions, TextArea mazeConsole)
+	public void display(List<Point2D> playerPositions, TextArea mazeConsole)
 	
 	{			
 			mazeConsole.clearText();
@@ -85,7 +85,7 @@ public class Maze {
 //			
 //		}
 //			
-	public void displayMaze()
+	public void display()
 	{
 		
 			for (char[] u:this.getDispMaze())
@@ -99,12 +99,12 @@ public class Maze {
 			}
 		
 		}
-	public  String getMazeDescription(int index1, int index2){
+	public  String getDescription(int index1, int index2){
 		
 		return this.description.get(index1).get(index2);
 	}
 	
-	public ArrayList<ArrayList<String>> getMazeDescription () {
+	public ArrayList<ArrayList<String>> getDescription () {
 		return this.description;
 	}
 	
@@ -113,10 +113,10 @@ public class Maze {
 		return this.dispMaze;
 	}
 
-	public int[] getEndMaze() {
+	public int[] getEnd() {
 		return endPos;
 	}
-	public int[] getStartMaze() {
+	public int[] getStart() {
 		return startPos;
 	}
 	
@@ -155,13 +155,13 @@ public class Maze {
 		return startPos;
 	}
 	
-	public int[] setSizeMaze() {
+	public int[] setSize() {
 		int sizeMazeY  = this.description.size();
 		int[] sizeMaze = {Integer.parseInt(this.description.get(sizeMazeY-1).get(0)),Integer.parseInt(this.description.get(sizeMazeY-1).get(1))};
  		return sizeMaze;
 	}
 	
-	public int[] getSizeMaze() {
+	public int[] getSize() {
 		return this.sizeMaze;
 	}
 	

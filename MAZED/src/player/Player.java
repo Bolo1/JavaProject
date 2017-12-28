@@ -17,8 +17,6 @@ public class Player {
 	private ArrayList<Item> inventory = new ArrayList<Item>();
 	private int lineOfSight=2;//Only used in hard mode
 
-
-
 	public Player(String playerName, Point2D playerPosition)
 	{
 		this.name = playerName;
@@ -27,24 +25,24 @@ public class Player {
 		this.positions.add(this.currentPosition);
 	}
 
-	public String getPlayerName() {
+	public String getName() {
 		return (this.name);
 	}
 
-	public List<Point2D> getPlayerPosition() {
+	public List<Point2D> getPosition() {
 		return(this.positions);
 	}
 
-	public Point2D getPlayerPosition(int index) {
+	public Point2D getPosition(int index) {
 		return (this.positions.get(index));
 	}
 
 
-	public void setPlayerPosition(Point2D newPosition) {
+	public void setPosition(Point2D newPosition) {
 		this.currentPosition = newPosition;
 	}
 
-	public void movePlayer(String direction, ArrayList <ArrayList<String>> mazeDescription) {
+	public void move(String direction, ArrayList <ArrayList<String>> mazeDescription) {
 
 		switch (direction) {
 
@@ -115,14 +113,14 @@ public class Player {
 
 		int indexX = (int) this.currentPosition.getX();
 		int indexY = (int) this.currentPosition.getY();
-		int sizeMaze = myMaze.getSizeMaze()[0];
+		int sizeMaze = myMaze.getSize()[0];
 		int index = 1 + indexX * (sizeMaze + 1) + indexY;
 		boolean canMove = false;
 		switch (dir) {
 
 		case "Up":{
 			int indexWall = 2;
-			String mazeElem = myMaze.getMazeDescription(index,indexWall);
+			String mazeElem = myMaze.getDescription(index,indexWall);
 			switch (mazeElem) {
 			case "wall":
 				canMove =  false;
@@ -133,26 +131,26 @@ public class Player {
 			}
 			break;
 		}
-
-
 		case "Down":{
 			int indexWall = 3;
-			String mazeElem = myMaze.getMazeDescription(index,indexWall);
+			String mazeElem = myMaze.getDescription(index,indexWall);
 			switch (mazeElem) {
+			
 			case "wall":
 				canMove =  false;
 				break;
+				
 			case "no":
 				canMove =  true;
 				break;
-
 			}
 			break;
 		}
 		case "Left":{
 			int indexWall = 5;
-			String mazeElem = myMaze.getMazeDescription(index,indexWall);
+			String mazeElem = myMaze.getDescription(index,indexWall);
 			switch (mazeElem) {
+			
 			case "wall":
 				canMove =  false;
 				break;
@@ -166,11 +164,12 @@ public class Player {
 
 		case "Right":{
 			int indexWall = 4;
-			String mazeElem = myMaze.getMazeDescription(index,indexWall);
+			String mazeElem = myMaze.getDescription(index,indexWall);
 			switch (mazeElem) {
 			case "wall":
 				canMove =  false;
 				break;
+			
 			case "no":
 				canMove =  true;
 				break;
@@ -183,23 +182,32 @@ public class Player {
 		return canMove;
 	}
 
-	public ArrayList<Item> getPlayerInventory(){
+	public ArrayList<Item> getInventory(){
 		return (this.inventory);
 
 	}
-	public int getPlayerSight() {
+	
+	public int getSight() {
 		return lineOfSight;
 	}
 	
-	public void printPlayerScore(int steps,Maze MyMaze) {
+	public void increaseSight(int bonus) {
+		this.lineOfSight+=bonus;
+	}
+	
+	public void printScore(int steps,Maze MyMaze) {
 		try (
 			FileWriter fileW   = new FileWriter("HighScores.txt",true);
 			BufferedWriter bufferW = new BufferedWriter(fileW);
 			PrintWriter printerW = new PrintWriter(bufferW);){
-			printerW.println(this.getPlayerName() + ","+MyMaze.name+","+steps);
+			printerW.println(this.getName() + ","+MyMaze.name+","+steps);
 		}catch(IOException i) {
 			i.printStackTrace();
 		}
 			
+	}
+	
+	public void pickUpObject(Item item2Pick) {
+		this.inventory.add(item2Pick);
 	}
 }

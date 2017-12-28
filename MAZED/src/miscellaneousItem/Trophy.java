@@ -1,8 +1,7 @@
 package miscellaneousItem;
 
-public class Key extends Item {
-	String type = "Key";
-	
+public class Trophy extends Item {
+
 	@Override
 	public void use() {
 		// TODO Auto-generated method stub
