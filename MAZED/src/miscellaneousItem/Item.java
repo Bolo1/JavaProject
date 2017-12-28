@@ -3,8 +3,8 @@ package miscellaneousItem;
 import player.Player;
 
 public class Item {
-	String type;
-	int scoreValue;
+	private String type;
+	private int scoreValue;
 	
 	public Item(String type, Player player) {
 		switch (type) {
@@ -37,5 +37,14 @@ public class Item {
 		}
 		
 	}
+	
+	public String getType() {
+		return this.type;
+	}
+	
+	public int getScoreVal() {
+		return this.scoreValue;
+	}
+	
 
 }
