@@ -1,6 +1,4 @@
 package player;
-import miscellaneousItem.Item;
-import userInterface.TextArea;
 
 import java.awt.geom.Point2D;
 import java.io.BufferedWriter;
@@ -11,134 +9,249 @@ import java.util.ArrayList;
 import java.util.List;
 
 import maze.Maze;
+import miscellaneousItem.Item;
+
 public class Player {
 	private String name;
 	private Point2D currentPosition;
-	public List<Point2D> positions = new  ArrayList<Point2D>() ;
 	private ArrayList<Item> inventory = new ArrayList<Item>();
-	private int lineOfSight=2;//Only used in hard mode
+	private int lineOfSight;//Only used in hard mode
+	private String canMove="";
+	private int nbOfSteps;
+	private int score;
+	private PlayerHistory history;
 
 	public Player(String playerName, Point2D playerPosition)
 	{
 		this.name = playerName;
 		this.currentPosition = playerPosition;
-		this.positions.add(this.currentPosition);
+		//this.positions.add(this.currentPosition);
+		this.inventory.add(new Item("empty"));
+		this.nbOfSteps = 0;
+		this.score = 100;
+		this.lineOfSight=2;
+		
+		ArrayList<Item> invCopy = new ArrayList<Item>();
+		for (int i=0; i<this.inventory.size();i++) {
+			//clone the item 
+			Item item = new Item(this.inventory.get(i).getType());
+			//store the item
+			invCopy.add(item);
+		}
+		
+		this.history = new PlayerHistory(new Point2D.Double(0,0), invCopy, this.nbOfSteps, this.score);
 	}
+	
 
 	public String getName() {
 		return (this.name);
-	}
-
-	public List<Point2D> getPosition() {
-		return(this.positions);
-	}
-
-	public Point2D getPosition(int index) {
-		return (this.positions.get(index));
 	}
 
 
 	public void setPosition(Point2D newPosition) {
 		this.currentPosition = newPosition;
 	}
+		
+	public void setCanMove(String reason) {
+		this.canMove = reason;
+	}
+	public String getCanMove () {
+		return canMove;
+	}
+	public Point2D getCurrentPosition(){
+		return this.currentPosition;
+	}
+	
+	public void updateNbOfSteps(int step2add) {
+		this.nbOfSteps = this.nbOfSteps+step2add;
+	}
+	
+	public int getNbOfSteps() {
+		return this.nbOfSteps;
+	}
+	
+	public int getScore() {
+		return this.score;
+	}
+	
+	public void updateScore(int score2add) {
+		this.score = this.score+score2add;
+	}
+	
+	public void printScore(String mazeName) {
+		try (
+				FileWriter fileW   = new FileWriter("HighScores.txt",true);
+				BufferedWriter bufferW = new BufferedWriter(fileW);
+				PrintWriter printerW = new PrintWriter(bufferW);){
+			printerW.println(this.getName() + ","+mazeName+","+this.nbOfSteps+","+this.score);
+		}catch(IOException i) {
+			i.printStackTrace();
+		}
 
-	public void move(String direction, ArrayList <ArrayList<String>> mazeDescription) {
-
-		switch (direction) {
-
-		case "Up": {
-			List <Point2D> newPos = new ArrayList <Point2D>();
-			for (int i = 0; i<this.positions.size();i++)
-			{
-				newPos.add(new Point2D.Double(this.positions.get(i).getX(),this.positions.get(i).getY()));
+	}
+	
+	public void updateHistory() {
+		
+		Point2D position2Add= new Point2D.Double(this.currentPosition.getX(),this.currentPosition.getY());
+		ArrayList<Item> inv2Add = new ArrayList<Item>();
+		for (int i=0; i<this.inventory.size();i++) {
+			//clone the item 
+			Item item = new Item(this.inventory.get(i).getType());
+			//store the item
+			inv2Add.add(item);
+		}
+		this.history.update(position2Add, inv2Add, this.nbOfSteps, this.score);
+	}
+	
+	public List<Point2D> getPosHistory(){
+		return this.history.getPosition();
+	}
+	
+	public void pickUpItem(Item item2Pick, Maze myMaze) {
+		if(this.inventory.get(0).getType() == "empty") {
+			this.inventory.set(0, item2Pick);
+		}else {
+		this.inventory.add(item2Pick);
+		}
+		int index1 = 1+(int)this.currentPosition.getX()*(myMaze.getSize()[0]+1)+(int) this.currentPosition.getY();
+		int index2 = myMaze.getNElemDesc()-1;
+		myMaze.modDescription(index1, index2, "no");
+		
+	}
+	public boolean searchInventory(String type) {
+		int sizeInv = this.inventory.size();
+		boolean isInInv = false;
+		for(int i=0;i<sizeInv;i++) {
+			if (type == this.inventory.get(i).getType()) {
+				isInInv = true;
 			}
-			int yPos = (int) this.currentPosition.getY();
-			int xPos = (int) this.currentPosition.getX();
-			xPos +=1;
+		}
+		return isInInv;
+	}
+	public String displayInventory() {
+		int sizeInv = this.inventory.size();
+		String disp="";
+		for(int i=0;i<sizeInv;i++) {
+			disp = disp+this.inventory.get(i).getType()+", ";
+		}
+		return disp;
+	}
 
-
-			this.currentPosition.setLocation(xPos, yPos);
-			newPos.add(new Point2D.Double(xPos,yPos));
-			this.positions = newPos;
-			break;}
-
-		case "Left":{ 
-			List <Point2D> newPos = new ArrayList <Point2D>();
-			for (int i = 0; i<this.positions.size();i++)
-			{
-				newPos.add(new Point2D.Double(this.positions.get(i).getX(),this.positions.get(i).getY()));
+	public int countInventory(String type) {
+		int sizeInv = this.inventory.size();
+		int counter = 0;
+		for(int i=0;i<sizeInv;i++) {
+			if (type == this.inventory.get(i).getType()) {
+				counter++;
 			}
-			int yPos = (int) this.currentPosition.getY();
-			int xPos = (int) this.currentPosition.getX();
-			yPos -=1;
+		}
+		return counter;
+	}
+	public int scoreInventory() {
+		
+		int sizeInv = this.inventory.size();
+		int score = 0;
+		for(int i=0;i<sizeInv;i++) {
+			score = score + this.inventory.get(i).getScoreVal();
+		}
+		return score;
+	}
 
-			this.currentPosition.setLocation(xPos, yPos);
-			newPos.add(new Point2D.Double(xPos,yPos));
-			this.positions = newPos;
-			break;}
+	public void useItem(Item item2Use) {
+		switch (item2Use.getType()) {
 
-		case "Right":{ 
-			List <Point2D> newPos = new ArrayList <Point2D>();
-			for (int i = 0; i<this.positions.size();i++)
-			{
-				newPos.add(new Point2D.Double(this.positions.get(i).getX(),this.positions.get(i).getY()));
-			}
-			int yPos = (int) this.currentPosition.getY();
-			int xPos = (int) this.currentPosition.getX();
-			
-			yPos +=1;
-			this.currentPosition.setLocation(xPos, yPos);
-			newPos.add(new Point2D.Double(xPos,yPos));
-			this.positions = newPos;
-			break;}
+		case "Key":
+			break;
 
-		case "Down":{
-			List <Point2D> newPos = new ArrayList <Point2D>();
-			for (int i = 0; i<this.positions.size();i++)
-			{
-				newPos.add(new Point2D.Double(this.positions.get(i).getX(),this.positions.get(i).getY()));
-			}
-			int yPos = (int) this.currentPosition.getY();
-			int xPos = (int) this.currentPosition.getX();
+		case "Trophy":
+			this.updateScore(item2Use.getScoreVal());
+			break;
 
-			xPos -=1;
-			this.currentPosition.setLocation(xPos, yPos);
-			newPos.add(new Point2D.Double(xPos,yPos));
-			this.positions = newPos;
-			break;}
+		case "Hammer":
+			break;
+
+		case "Light":
+			//Light increase Sight
+			this.increaseSight(2);
+			break;
+
+		case "Trap":
+			//Traps increase the number of step you make
+			this.updateNbOfSteps(5);
+			break;
 		}
 	}
 
-	public boolean canMove(String dir, Maze myMaze, TextArea mazeText) {
+
+	public boolean canMove(String dir, Maze myMaze) {
 
 		boolean canMove = false;
 		switch (dir) {
 
 		case "Up":{
 			int indexWall = 2;
-			canMove=checkWall(myMaze,indexWall,dir,mazeText);
+			canMove=checkWall(myMaze,indexWall,dir);
 			break;
 		}
 		case "Down":{
 			int indexWall = 3;
-			canMove=checkWall(myMaze,indexWall,dir,mazeText);
+			canMove=checkWall(myMaze,indexWall,dir);
 			break;
 		}
 		case "Left":{
 			int indexWall = 5;
-			canMove=checkWall(myMaze,indexWall,dir,mazeText);
+			canMove=checkWall(myMaze,indexWall,dir);
 			break;
 		}
 
 		case "Right":{
 			int indexWall = 4;
-			canMove=checkWall(myMaze,indexWall,dir,mazeText);
+			canMove=checkWall(myMaze,indexWall,dir);
 			break;
 		}
 		default :
 			canMove =  false;
 		}
 		return canMove;
+	}
+	
+
+	public void move(String direction, ArrayList <ArrayList<String>> mazeDescription) {
+
+		switch (direction) {
+
+		case "Up": {
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
+			xPos +=1;
+			this.currentPosition= new Point2D.Double(xPos, yPos);
+			break;}
+
+		case "Left":{ 
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
+			yPos -=1;
+			this.currentPosition.setLocation(xPos, yPos);
+			break;}
+
+		case "Right":{ 
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
+			yPos +=1;
+			this.currentPosition.setLocation(xPos, yPos);
+			break;}
+
+		case "Down":{
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
+			xPos -=1;
+			this.currentPosition.setLocation(xPos, yPos);
+			break;}
+		}
+		//Increase number of step when player moves
+		this.updateNbOfSteps(1);
+		//Decrease the score by the number of steps
+		this.updateScore(-1);
 	}
 
 	public ArrayList<Item> getInventory(){
@@ -154,19 +267,9 @@ public class Player {
 		this.lineOfSight+=bonus;
 	}
 
-	public void printScore(int steps,Maze MyMaze) {
-		try (
-				FileWriter fileW   = new FileWriter("HighScores.txt",true);
-				BufferedWriter bufferW = new BufferedWriter(fileW);
-				PrintWriter printerW = new PrintWriter(bufferW);){
-			printerW.println(this.getName() + ","+MyMaze.name+","+steps);
-		}catch(IOException i) {
-			i.printStackTrace();
-		}
 
-	}
 
-	public boolean checkWall(Maze myMaze, int indexWall, String dir, TextArea mazeText) {
+	public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 		
 		int indexX = (int) this.currentPosition.getX();
 		int indexY = (int) this.currentPosition.getY();
@@ -228,89 +331,20 @@ public class Player {
 			    }
 				
 			}else {
-				//mazeText.updateText("You need a Hammer to break this wall");
 			}
 			
 			break;
 
 		case "door":
 			canMove = searchInventory("Key");
-			//if (!canMove) {
-				//mazeText.clearText();
-				//mazeText.updateText("You need a key to open this door");
-			//}
 			break;
 		}
+			this.setCanMove(mazeElem);
 		return canMove;
-	}
-
-	public void pickUpItem(Item item2Pick, Maze myMaze) {
-		this.inventory.add(item2Pick);
-		int index1 = 1+(int)this.currentPosition.getX()*(myMaze.getSize()[0]+1)+(int) this.currentPosition.getY();
-		int index2 = myMaze.getNElemDesc()-1;
-		myMaze.modDescription(index1, index2, "no");
 		
 	}
-	public boolean searchInventory(String type) {
-		int sizeInv = this.inventory.size();
-		boolean isInInv = false;
-		for(int i=0;i<sizeInv;i++) {
-			if (type == this.inventory.get(i).getType()) {
-				isInInv = true;
-			}
-		}
-		return isInInv;
-	}
-	public String displayInventory() {
-		int sizeInv = this.inventory.size();
-		String disp="";
-		for(int i=0;i<sizeInv;i++) {
-			disp = disp+this.inventory.get(i).getType()+", ";
-		}
-		return disp;
-	}
 
-	public int countInventory(String type) {
-		int sizeInv = this.inventory.size();
-		int counter = 0;
-		for(int i=0;i<sizeInv;i++) {
-			if (type == this.inventory.get(i).getType()) {
-				counter++;
-			}
-		}
-		return counter;
-	}
-	public int scoreInventory() {
-		
-		int sizeInv = this.inventory.size();
-		int score = 0;
-		for(int i=0;i<sizeInv;i++) {
-			score = score + this.inventory.get(i).getScoreVal();
-		}
-		return score;
-	}
-
-	public void useItem(Item item2use) {
-		switch (item2use.getType()) {
-
-		case "Key":
-			break;
-
-		case "Trophy":
-			break;
-
-		case "Hammer":
-			break;
-
-		case "Light":
-			this.increaseSight(2);
-			break;
-
-		case "Trap":
-			for (int i= 0; i<5;i++) {
-				this.positions.add(this.currentPosition);
-			}
-			break;
-		}
-	}
 }
+	
+	
+

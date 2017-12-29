@@ -4,16 +4,15 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
+//import java.util.List;
 import java.util.Scanner;
 
 import userInterface.TextArea;
 
 public class Maze {
 	
-	public String name;//Contain the name of the maze to later write it in the high score txt file
+	private String name;//Contain the name of the maze to later write it in the high score txt file
 	private ArrayList <ArrayList<String>> description;//Contain the description of the Maze
-	private char[][] dispMaze;//Contain the "picture" of the maze 
 	private  int [] startPos= {0,0};
 	private  int[]  endPos={0,0};
 	private int[] sizeMaze= {0,0};
@@ -25,41 +24,36 @@ public class Maze {
 		//fill up the attribute with the input of the constructor
 		this.name = mazeName;
 		this.description = mazeDescription;
-		this.dispMaze = displayOfMaze;
+		
 		endPos = setEndPos();
 		startPos = setStartPos();
 		sizeMaze = setSize();
 		nElemDesc = this.description.get(0).size();
 	}
 	
+	public String getName() {
+		return this.name;
+	}
+	
 	//Let us create a method to dipslay/refresh the maze. The function takes into account the player position
-	public void display(List<Point2D> playerPositions, TextArea mazeConsole)
+	public void display(Point2D playerPositions, TextArea mazeConsole)
 	
 	{			
-			this.dispMaze = Maze.toChar(this.description);
+			char [][] maze2Display = Maze.toChar(this.description);
 			mazeConsole.clearText();
-			int sizeMazeY = this.dispMaze.length;
+			int sizeMazeY = maze2Display.length;
 			//int sizeMazeX = this.dispMaze[0].length;
 					
 					//((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j]
-			switch (playerPositions.size()) {
-				case 1:{
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getX()*2 + 1)][2 + (int) playerPositions.get(0).getY() * 4] = 'P';
-					break;
-				}
-				case 2:{
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getX()*2 + 1)][2 + (int) playerPositions.get(0).getY() * 4] = 'S';
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(1).getX()*2 + 1)][2 + (int) playerPositions.get(1).getY() * 4] = 'P';
-					break;
-				}
-				default:{
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(0).getX()*2 + 1)][2 + (int) playerPositions.get(0).getY() * 4] = 'S';
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(playerPositions.size()-2).getX()*2 + 1)][2 + (int) playerPositions.get(playerPositions.size()-2).getY() * 4] = ' ';
-					this.dispMaze[(sizeMazeY-1) - ((int) playerPositions.get(playerPositions.size()-1).getX()*2 + 1)][2 + (int) playerPositions.get(playerPositions.size()-1).getY() * 4] = 'P';
-				}
+			if(playerPositions.getX() == this.startPos[0] & playerPositions.getY() == this.startPos[1]) {
+				maze2Display[(sizeMazeY-1) - (this.startPos[0]*2 + 1)][2 + this.startPos[1] * 4] = 'P';
+			}else {
 				
+				maze2Display[(sizeMazeY-1) - (this.startPos[0]*2 + 1)][2 + this.startPos[1] * 4] = 'S';
+				maze2Display[(sizeMazeY-1) - ((int) playerPositions.getX()*2 + 1)][2 + (int) playerPositions.getY() * 4] = 'P';
 			}
-			for (char[] u:this.dispMaze)
+
+			for (char[] u:maze2Display)
 			{
 				String toPrint ="";
 				for(char v:u)
@@ -73,8 +67,8 @@ public class Maze {
 					
 	public void display()
 	{
-		
-			for (char[] u:this.getDispMaze())
+		char [][] maze2Display = Maze.toChar(this.description);
+			for (char[] u:maze2Display)
 			{
 				String toPrint ="";
 				for(char v:u)
@@ -96,11 +90,6 @@ public class Maze {
 	
 	public ArrayList<ArrayList<String>> getDescription () {
 		return this.description;
-	}
-	
-		
-	public char[][] getDispMaze(){
-		return this.dispMaze;
 	}
 
 	public int[] getEnd() {

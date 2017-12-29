@@ -2,13 +2,11 @@ package miscellaneousItem;
 
 import java.util.Random;
 
-import player.Player;
-
 public class Item {
 	private String type;
 	private int scoreValue;
 	
-	public Item(String type, Player player) {
+	public Item(String type) {
 		switch (type) {
 		
 		case "K":
@@ -18,6 +16,7 @@ public class Item {
 			
 		case "C":
 			this.type ="Trophy";
+			//Points is generated randomly
 			Random rand =new Random();
 			this.scoreValue=rand.nextInt(40)+11;
 			break;
@@ -30,15 +29,16 @@ public class Item {
 		case "L":
 			this.type ="Torch";
 			this.scoreValue=0;
-			player.increaseSight(2);
 			break;
 			
 		case "T":
 			this.type ="Trap";
-			this.scoreValue=-5;
 			break;
+			
+		case "empty":
+			this.type ="empty";
+			this.scoreValue=0;
 		}
-		
 	}
 	
 	public String getType() {

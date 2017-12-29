@@ -1,19 +1,18 @@
 package maze;
 import player.Player;
 import userInterface.MainUI;
+import miscellaneousItem.Item;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
-
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-import miscellaneousItem.Item;
+
 
 public class MazeMain {
 	public static void initGame()
@@ -25,14 +24,14 @@ public class MazeMain {
 		frame.setVisible(true);
 		//Intro Text on UI
 		frame.mazeText.updateText("Hello, you are the Prince of Persia, right? I was waiting for you,\nwhat is your name again ? ");
-		
+
 		//Open dialog for name
 		String input = JOptionPane.showInputDialog(
 				null, "Please Enter Your Name");
 		String playerName = input;
 		Point2D playerPosition = new Point2D.Double(0,0);
 		Player player = new Player(playerName,playerPosition);
-		
+
 		//Follow up intro on UI
 		frame.mazeText.clearText();
 		frame.mazeText.updateText(player.getName() +", the Dahaka put you in a terrible maze full of trap and\ndangers! It is also coming for you ! So hurry up!\n");
@@ -48,60 +47,97 @@ public class MazeMain {
 
 		//display maze on console and on UI
 		myMaze.display();
-		myMaze.display(player.getPosition(),frame.mazeConsole);
+		myMaze.display(player.getCurrentPosition(),frame.mazeConsole);
 
 		int delay = 500; //Refresh game every 0.5 sec
-		
-		int score = (myMaze.getSize()[0]+1)*(myMaze.getSize()[1]+1);
-		
+
 		// Game is played with a timer
 		final Timer gameTimer = new Timer(delay,null);
 		gameTimer.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent evt) {
-				
+
 				//First task check if button was pressed
 				if (frame.buttonListener.getWasPressed()!="") {
-					//Then check if player is allowed to move in that direction
-					if (player.canMove(frame.buttonListener.getWasPressed(),myMaze,frame.mazeText)){
+					//Check if player is allowed to move in that direction
+					if (player.canMove(frame.buttonListener.getWasPressed(),myMaze)){
+
 						// Move player
 						player.move(frame.buttonListener.getWasPressed(), myMaze.getDescription());
-					}else {}
+						
+						//Refresh the maze
+						frame.buttonListener.resetWasPressed();					
+						myMaze.display(player.getCurrentPosition(), frame.mazeConsole);
+						
+						//Refresh text
+						frame.mazeText.clearText();
+						frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  player.getNbOfSteps()+"\nScore: "+ player.getScore());
+
 					
-					int nbOfSteps  = (int) player.getPosition().size()-1;
-					int newScore   = score-nbOfSteps + player.scoreInventory();
-					frame.mazeText.clearText();
-					frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  nbOfSteps+"\nScore: "+newScore);
-					frame.buttonListener.resetWasPressed();					
-					myMaze.display(player.getPosition(), frame.mazeConsole);
+						
+						//Add text when player cross special elements
+						switch (player.getCanMove()) {
+						case "breakable":
+							frame.mazeText.updateText("\nYou broke down the wall using your hammer !");
+							break;
+						case "door":
+							frame.mazeText.updateText("\nYou opened the door with your key !");
+							break;
+						case "fake":
+							frame.mazeText.updateText("\nYou went through a fake wall !");
+							break;
+						}	
+						
+						//Check for objects to pickup on the new position
+						int xPosPlayer = (int) player.getCurrentPosition().getX();
+						int yPosPlayer = (int) player.getCurrentPosition().getY();
+						String object  = myMaze.getDescription(1+xPosPlayer*(myMaze.getSize()[0]+1)+yPosPlayer,myMaze.getNElemDesc()-1);
+						
+						switch (object) {
+						case "no":
+							break;
+
+						case "S":
+							break;
+
+						case "E":
+							frame.mazeText.clearText();
+							frame.mazeText.updateText("You managed to escape the Dahaka ! In only "+player.getNbOfSteps() + " steps.\nYour score is "+ player.getScore()); 
+							player.printScore(myMaze.getName());
+							gameTimer.stop();//End game if players arrived at Exit
+							break;
+
+						default:
+							Item item = new Item(object);
+							player.pickUpItem(item, myMaze);
+							player.useItem(item);
+							//int tmpScore   = score-nbOfSteps + player.scoreInventory();
+							frame.mazeText.clearText();
+							frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + player.getNbOfSteps()+ "\nScore: "+player.getScore()+"\nYou Picked up a "+ item.getType());
+
+							break;
+						}
+						
+						//Update player History
+						player.updateHistory();
+						
+					}else {
+						//Update text
+						frame.mazeText.clearText();
+						frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + player.getNbOfSteps()+"\nScore: "+player.getScore());
+						//Add text to explain player why he could not move
+						switch(player.getCanMove()) {
+						case "breakable":
+							frame.mazeText.updateText("\nYou need a Hammer to break this wall !");
+							break;
+						case "door":
+							frame.mazeText.updateText("\nYou need a key to open this door !");
+							break;
+						default:
+							frame.mazeText.updateText("\nYou cannot go through this wall !");
+						}
+					}
 
 				}
-				int nbOfSteps  = (int) player.getPosition().size()-1;
-				int newScore   = score-nbOfSteps + player.scoreInventory();
-				int xPosPlayer = (int) player.getPosition().get(nbOfSteps).getX();
-				int yPosPlayer = (int) player.getPosition().get(nbOfSteps).getY();
-				String object  = myMaze.getDescription(1+xPosPlayer*(myMaze.getSize()[0]+1)+yPosPlayer,myMaze.getNElemDesc()-1);
-
-				switch (object) {
-				case "no":
-					break;
-				case "S":
-					break;
-				case "E":
-					frame.mazeText.clearText();
-					frame.mazeText.updateText("You managed to escape the Dahaka ! In only "+nbOfSteps + " steps.\nYour score is "+ newScore); 
-					player.printScore(nbOfSteps, myMaze);
-					gameTimer.stop();//End game if players arrived at Exit
-					break;
-					
-				default:
-					Item item = new Item(object,player);
-					player.pickUpItem(item, myMaze);
-					frame.mazeText.clearText();
-					frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + nbOfSteps+ "\nScore: "+newScore+"\nYou Picked up a "+ item.getType());
-					break;
-				}	
-				
-
 			}
 		});
 
@@ -110,7 +146,6 @@ public class MazeMain {
 
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		// Create a maze file object
 
 		MazeMain.initGame();
