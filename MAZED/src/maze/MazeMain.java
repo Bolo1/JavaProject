@@ -20,7 +20,8 @@ public class MazeMain {
 		//UI initiation
 		MainUI frame = new MainUI();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//frame.pack();
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		//frame.setUndecorated(true);
 		frame.setVisible(true);
 		//Intro Text on UI
 		frame.mazeText.updateText("Hello, you are the Prince of Persia, right? I was waiting for you,\nwhat is your name again ? ");
@@ -143,7 +144,6 @@ public class MazeMain {
 
 		gameTimer.start();
 	}
-
 
 	public static void main(String[] args) {
 		// Create a maze file object
