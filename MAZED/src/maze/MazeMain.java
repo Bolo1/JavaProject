@@ -12,8 +12,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-
-
 public class MazeMain {
 	public static void initGame()
 	{
@@ -59,84 +57,92 @@ public class MazeMain {
 
 				//First task check if button was pressed
 				if (frame.buttonListener.getWasPressed()!="") {
-					//Check if player is allowed to move in that direction
-					if (player.canMove(frame.buttonListener.getWasPressed(),myMaze)){
+					switch (frame.buttonListener.getTypePressed()) {
+					case "dir":
+						//Check if player is allowed to move in that direction
+						if (player.canMove(frame.buttonListener.getWasPressed(),myMaze)){
 
-						// Move player
-						player.move(frame.buttonListener.getWasPressed(), myMaze.getDescription());
-						
-						//Refresh the maze
-						frame.buttonListener.resetWasPressed();					
-						myMaze.display(player.getCurrentPosition(), frame.mazeConsole);
-						
-						//Refresh text
-						frame.mazeText.clearText();
-						frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  player.getNbOfSteps()+"\nScore: "+ player.getScore());
-
-					
-						
-						//Add text when player cross special elements
-						switch (player.getCanMove()) {
-						case "breakable":
-							frame.mazeText.updateText("\nYou broke down the wall using your hammer !");
-							break;
-						case "door":
-							frame.mazeText.updateText("\nYou opened the door with your key !");
-							break;
-						case "fake":
-							frame.mazeText.updateText("\nYou went through a fake wall !");
-							break;
-						}	
-						
-						//Check for objects to pickup on the new position
-						int xPosPlayer = (int) player.getCurrentPosition().getX();
-						int yPosPlayer = (int) player.getCurrentPosition().getY();
-						String object  = myMaze.getDescription(1+xPosPlayer*(myMaze.getSize()[0]+1)+yPosPlayer,myMaze.getNElemDesc()-1);
-						
-						switch (object) {
-						case "no":
-							break;
-
-						case "S":
-							break;
-
-						case "E":
+							// Move player
+							player.move(frame.buttonListener.getWasPressed(), myMaze.getDescription());
+							
+							//Refresh the maze
+							frame.buttonListener.resetWasPressed();					
+							myMaze.display(player.getCurrentPosition(), frame.mazeConsole);
+							
+							//Refresh text
 							frame.mazeText.clearText();
-							frame.mazeText.updateText("You managed to escape the Dahaka ! In only "+player.getNbOfSteps() + " steps.\nYour score is "+ player.getScore()); 
-							player.printScore(myMaze.getName());
-							gameTimer.stop();//End game if players arrived at Exit
-							break;
+							frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  player.getNbOfSteps()+"\nScore: "+ player.getScore());
+							
+							//Add text when player cross special elements
+							switch (player.getCanMove()) {
+							case "breakable":
+								frame.mazeText.updateText("\nYou broke down the wall using your hammer !");
+								break;
+							case "door":
+								frame.mazeText.updateText("\nYou opened the door with your key !");
+								break;
+							case "fake":
+								frame.mazeText.updateText("\nYou went through a fake wall !");
+								break;
+							}	
+							
+							//Check for objects to pickup on the new position
+							int xPosPlayer = (int) player.getCurrentPosition().getX();
+							int yPosPlayer = (int) player.getCurrentPosition().getY();
+							String object  = myMaze.getDescription(1+xPosPlayer*(myMaze.getSize()[0]+1)+yPosPlayer,myMaze.getNElemDesc()-1);
+							
+							switch (object) {
+							case "no":
+								break;
 
-						default:
-							Item item = new Item(object);
-							player.pickUpItem(item, myMaze);
-							player.useItem(item);
-							//int tmpScore   = score-nbOfSteps + player.scoreInventory();
+							case "S":
+								break;
+
+							case "E":
+								frame.mazeText.clearText();
+								frame.mazeText.updateText("You managed to escape the Dahaka ! In only "+player.getNbOfSteps() + " steps.\nYour score is "+ player.getScore()); 
+								player.printScore(myMaze.getName());
+								gameTimer.stop();//End game if players arrived at Exit
+								break;
+
+							default:
+								Item item = new Item(object);
+								player.pickUpItem(item, myMaze);
+								player.useItem(item);
+								//int tmpScore   = score-nbOfSteps + player.scoreInventory();
+								frame.mazeText.clearText();
+								frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + player.getNbOfSteps()+ "\nScore: "+player.getScore()+"\nYou Picked up a "+ item.getType());
+
+								break;
+							}
+							
+							//Update player History
+							player.updateHistory();
+							
+						}else {
+							//Update text
 							frame.mazeText.clearText();
-							frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + player.getNbOfSteps()+ "\nScore: "+player.getScore()+"\nYou Picked up a "+ item.getType());
-
-							break;
+							frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + player.getNbOfSteps()+"\nScore: "+player.getScore());
+							//Add text to explain player why he could not move
+							switch(player.getCanMove()) {
+							case "breakable":
+								frame.mazeText.updateText("\nYou need a Hammer to break this wall !");
+								break;
+							case "door":
+								frame.mazeText.updateText("\nYou need a key to open this door !");
+								break;
+							default:
+								frame.mazeText.updateText("\nYou cannot go through this wall !");
+							}
 						}
-						
-						//Update player History
-						player.updateHistory();
-						
-					}else {
-						//Update text
-						frame.mazeText.clearText();
-						frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + player.getNbOfSteps()+"\nScore: "+player.getScore());
-						//Add text to explain player why he could not move
-						switch(player.getCanMove()) {
-						case "breakable":
-							frame.mazeText.updateText("\nYou need a Hammer to break this wall !");
-							break;
-						case "door":
-							frame.mazeText.updateText("\nYou need a key to open this door !");
-							break;
-						default:
-							frame.mazeText.updateText("\nYou cannot go through this wall !");
-						}
+						break;
+					case "undo":
+						player.undoMove(myMaze);
+						break;
+					case "AIsolving":
+						break;
 					}
+					
 
 				}
 			}

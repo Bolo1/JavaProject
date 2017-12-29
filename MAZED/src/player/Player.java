@@ -89,6 +89,19 @@ public class Player {
 		}
 
 	}
+	public ArrayList<Item> getInventory(){
+		return (this.inventory);
+
+	}
+
+	public int getSight() {
+		return lineOfSight;
+	}
+
+	public void increaseSight(int bonus) {
+		this.lineOfSight+=bonus;
+	}
+
 	
 	public void updateHistory() {
 		
@@ -215,61 +228,7 @@ public class Player {
 		return canMove;
 	}
 	
-
-	public void move(String direction, ArrayList <ArrayList<String>> mazeDescription) {
-
-		switch (direction) {
-
-		case "Up": {
-			int yPos = (int) this.currentPosition.getY();
-			int xPos = (int) this.currentPosition.getX();
-			xPos +=1;
-			this.currentPosition= new Point2D.Double(xPos, yPos);
-			break;}
-
-		case "Left":{ 
-			int yPos = (int) this.currentPosition.getY();
-			int xPos = (int) this.currentPosition.getX();
-			yPos -=1;
-			this.currentPosition.setLocation(xPos, yPos);
-			break;}
-
-		case "Right":{ 
-			int yPos = (int) this.currentPosition.getY();
-			int xPos = (int) this.currentPosition.getX();
-			yPos +=1;
-			this.currentPosition.setLocation(xPos, yPos);
-			break;}
-
-		case "Down":{
-			int yPos = (int) this.currentPosition.getY();
-			int xPos = (int) this.currentPosition.getX();
-			xPos -=1;
-			this.currentPosition.setLocation(xPos, yPos);
-			break;}
-		}
-		//Increase number of step when player moves
-		this.updateNbOfSteps(1);
-		//Decrease the score by the number of steps
-		this.updateScore(-1);
-	}
-
-	public ArrayList<Item> getInventory(){
-		return (this.inventory);
-
-	}
-
-	public int getSight() {
-		return lineOfSight;
-	}
-
-	public void increaseSight(int bonus) {
-		this.lineOfSight+=bonus;
-	}
-
-
-
-	public boolean checkWall(Maze myMaze, int indexWall, String dir) {
+public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 		
 		int indexX = (int) this.currentPosition.getX();
 		int indexY = (int) this.currentPosition.getY();
@@ -343,6 +302,52 @@ public class Player {
 		return canMove;
 		
 	}
+	
+
+	public void move(String direction, ArrayList <ArrayList<String>> mazeDescription) {
+
+		switch (direction) {
+
+		case "Up": {
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
+			xPos +=1;
+			this.currentPosition= new Point2D.Double(xPos, yPos);
+			break;}
+
+		case "Left":{ 
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
+			yPos -=1;
+			this.currentPosition.setLocation(xPos, yPos);
+			break;}
+
+		case "Right":{ 
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
+			yPos +=1;
+			this.currentPosition.setLocation(xPos, yPos);
+			break;}
+
+		case "Down":{
+			int yPos = (int) this.currentPosition.getY();
+			int xPos = (int) this.currentPosition.getX();
+			xPos -=1;
+			this.currentPosition.setLocation(xPos, yPos);
+			break;}
+		}
+		//Increase number of step when player moves
+		this.updateNbOfSteps(1);
+		//Decrease the score by the number of steps
+		this.updateScore(-1);
+	}
+	
+	public void undoMove(Maze myMaze) {
+		//List<Point2D >newPosHistory = this.history.getPosition().remove(this.history.getPosition().size()-1);
+		// TODO implement undoMove
+		
+	}
+
 
 }
 	
