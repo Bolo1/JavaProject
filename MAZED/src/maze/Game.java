@@ -3,6 +3,7 @@ import player.Player;
 import userInterface.MainUI;
 import userInterface.TextArea;
 import miscellaneousItem.Item;
+import mazeSolvingAlgorithm.Dijkstra;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+
+
 
 public class Game {
 	public static void initGame()
@@ -38,12 +41,11 @@ public class Game {
 		frame.mazeText.updateText("You need to get out of there ! To help you here is a map of the maze\non which I will update your position.");
 
 		//Load, read and set the maze
-		File mazeFile = new File("mazeEscape.txt");
+		File mazeFile = new File("mazeEscape-noSpecialWalls.txt");
 		String fileName = mazeFile.getName().substring(0, mazeFile.getName().lastIndexOf('.'));
 		//Call the read method from the class ReadsMazeFile giving the path of the file as input and store it in an 2D array list of string
 		ArrayList <ArrayList<String>> mazeDescription = Maze.read(mazeFile.getAbsolutePath());
-		char [][] displayOfMaze = Maze.toChar(mazeDescription);
-		Maze myMaze = new Maze (fileName,mazeDescription,displayOfMaze);
+		Maze myMaze = new Maze (fileName,mazeDescription);
 
 		//display maze on console and on UI
 		myMaze.display();
@@ -134,6 +136,13 @@ public class Game {
 						
 						break;
 					case "AIsolving":
+						switch(frame.buttonListener.getWasPressed()) {
+						case "Dijkstra":
+							Dijkstra.calc(myMaze);
+							break;
+						case "":
+							break;
+						}
 						frame.buttonListener.resetWasPressed();	
 						
 						break;

@@ -37,7 +37,7 @@ public class MyButtonListener implements ActionListener {
 			this.typePressed = "undo";
 		break;
 		case "AI1":
-			this.wasPressed = "AI1";
+			this.wasPressed = "Dijkstra";
 			this.typePressed = "AIsolving";
 		break;
 		case "AI2":

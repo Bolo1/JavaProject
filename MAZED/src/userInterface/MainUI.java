@@ -152,7 +152,7 @@ public class MainUI extends JFrame{
 		undoButton.setActionCommand("undo");
 		
 		
-		JButton AIAlg1 = new JButton("AI1");
+		JButton AIAlg1 = new JButton("DijskraCalc");
 		AIAlg1.setBackground(Color.black);
 		AIAlg1.setForeground(Color.white);
 		AIAlg1.addActionListener(this.buttonListener);
