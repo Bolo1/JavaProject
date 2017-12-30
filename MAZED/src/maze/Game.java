@@ -1,6 +1,7 @@
 package maze;
 import player.Player;
 import userInterface.MainUI;
+import userInterface.TextArea;
 import miscellaneousItem.Item;
 
 import java.awt.event.ActionEvent;
@@ -12,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-public class MazeMain {
+public class Game {
 	public static void initGame()
 	{
 		//UI initiation
@@ -40,7 +41,7 @@ public class MazeMain {
 		File mazeFile = new File("mazeEscape.txt");
 		String fileName = mazeFile.getName().substring(0, mazeFile.getName().lastIndexOf('.'));
 		//Call the read method from the class ReadsMazeFile giving the path of the file as input and store it in an 2D array list of string
-		ArrayList <ArrayList<String>> mazeDescription =Maze.read(mazeFile.getAbsolutePath());
+		ArrayList <ArrayList<String>> mazeDescription = Maze.read(mazeFile.getAbsolutePath());
 		char [][] displayOfMaze = Maze.toChar(mazeDescription);
 		Maze myMaze = new Maze (fileName,mazeDescription,displayOfMaze);
 
@@ -48,9 +49,9 @@ public class MazeMain {
 		myMaze.display();
 		myMaze.display(player.getCurrentPosition(),frame.mazeConsole);
 
-		int delay = 500; //Refresh game every 0.5 sec
+		int delay = 500; //To Refresh game every 0.5 sec
 
-		// Game is played with a timer
+		// Game is played with a timer that perform action every delay
 		final Timer gameTimer = new Timer(delay,null);
 		gameTimer.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent evt) {
@@ -60,13 +61,13 @@ public class MazeMain {
 					switch (frame.buttonListener.getTypePressed()) {
 					case "dir":
 						//Check if player is allowed to move in that direction
-						if (player.canMove(frame.buttonListener.getWasPressed(),myMaze)){
+						boolean canMove = player.canMove(frame.buttonListener.getWasPressed(),myMaze);
+						if (canMove){
 
 							// Move player
 							player.move(frame.buttonListener.getWasPressed(), myMaze.getDescription());
 							
 							//Refresh the maze
-							frame.buttonListener.resetWasPressed();					
 							myMaze.display(player.getCurrentPosition(), frame.mazeConsole);
 							
 							//Refresh text
@@ -74,17 +75,10 @@ public class MazeMain {
 							frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  player.getNbOfSteps()+"\nScore: "+ player.getScore());
 							
 							//Add text when player cross special elements
-							switch (player.getCanMove()) {
-							case "breakable":
-								frame.mazeText.updateText("\nYou broke down the wall using your hammer !");
-								break;
-							case "door":
-								frame.mazeText.updateText("\nYou opened the door with your key !");
-								break;
-							case "fake":
-								frame.mazeText.updateText("\nYou went through a fake wall !");
-								break;
-							}	
+							displaySpeInfo(player.getCanMove(), frame.mazeText, canMove);
+
+							//Reset the button indicator
+							frame.buttonListener.resetWasPressed();		
 							
 							//Check for objects to pickup on the new position
 							int xPosPlayer = (int) player.getCurrentPosition().getX();
@@ -111,8 +105,7 @@ public class MazeMain {
 								player.useItem(item);
 								//int tmpScore   = score-nbOfSteps + player.scoreInventory();
 								frame.mazeText.clearText();
-								frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + player.getNbOfSteps()+ "\nScore: "+player.getScore()+"\nYou Picked up a "+ item.getType());
-
+								frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + player.getNbOfSteps()+ "\nScore: "+player.getScore()+"\nYou Picked up a "+ item.getName());
 								break;
 							}
 							
@@ -124,38 +117,59 @@ public class MazeMain {
 							frame.mazeText.clearText();
 							frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + player.getNbOfSteps()+"\nScore: "+player.getScore());
 							//Add text to explain player why he could not move
-							switch(player.getCanMove()) {
-							case "breakable":
-								frame.mazeText.updateText("\nYou need a Hammer to break this wall !");
-								break;
-							case "door":
-								frame.mazeText.updateText("\nYou need a key to open this door !");
-								break;
-							default:
-								frame.mazeText.updateText("\nYou cannot go through this wall !");
-							}
+							displaySpeInfo(player.getCanMove(), frame.mazeText, canMove);
 						}
 						break;
 					case "undo":
-						player.undoMove(myMaze);
+						//Undo last move
+						frame.buttonListener.resetWasPressed();					
+						player.undoMove();
+						//update text
+						frame.mazeText.clearText();
+						frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  player.getNbOfSteps()+"\nScore: "+ player.getScore());
+						frame.mazeText.updateText("\nYou went back in time");
+						//update maze
+						myMaze.display(player.getCurrentPosition(), frame.mazeConsole);
+						
+						
 						break;
 					case "AIsolving":
+						frame.buttonListener.resetWasPressed();	
+						
 						break;
 					}
-					
-
 				}
 			}
 		});
 
 		gameTimer.start();
 	}
-
-	public static void main(String[] args) {
-		// Create a maze file object
-
-		MazeMain.initGame();
-
+	
+	public static void displaySpeInfo(String couldMove, TextArea mazeText, boolean canMove) {
+		
+		if(canMove) {
+			switch (couldMove) {
+			case "breakable":
+				mazeText.updateText("\nYou broke down the wall using your hammer !");
+				break;
+			case "door":
+				mazeText.updateText("\nYou opened the door with your key !");
+				break;
+			case "fake":
+				mazeText.updateText("\nYou went through a fake wall !");
+				break;
+			}	
+		}else {
+			switch (couldMove) {
+		case "breakable":
+			mazeText.updateText("\nYou need a Hammer to break this wall !");
+			break;
+		case "door":
+			mazeText.updateText("\nYou need a key to open this door !");
+			break;
+		default:
+			mazeText.updateText("\nYou cannot go through this wall !");
+		}
+		}
 	}
-
 }

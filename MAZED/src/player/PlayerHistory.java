@@ -42,6 +42,10 @@ public class PlayerHistory {
 		this.position = newPos;	
 	}
 	
+	public ArrayList<ArrayList<Item>> getInv(){
+		return inventory;
+	}
+	
 	public ArrayList<Item> getInv(int index){
 		return inventory.get(index);
 	}
@@ -50,20 +54,35 @@ public class PlayerHistory {
 		this.inventory.add(playerInventory);
 	}
 	
+	public ArrayList<Integer> getStep(){
+		return this.step;
+	}
+
 	public Integer getStep(int index){
-		return step.get(index);
+		return this.step.get(index);
 	}
 	
 	public void updateStep(int playerSteps) {
 		this.step.add(playerSteps);
 	}
 	
+	public ArrayList<Integer> getScore(){
+		return this.score;
+	}
+
 	public Integer getScore(int index){
 		return score.get(index);
 	}
 	
 	public void updateScore(int playerScore) {
 		this.score.add(playerScore);
+	}
+	
+	public void eraseHistory() {
+		this.position.remove(this.position.size()-1);
+		this.inventory.remove(this.inventory.size()-1);
+		this.step.remove(this.step.size()-1);
+		this.score.remove(this.score.size()-1);
 	}
 	
 	public void update(Point2D playerPos, ArrayList<Item> inventory, int nbOfSteps, int score) {

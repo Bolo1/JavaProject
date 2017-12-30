@@ -379,6 +379,7 @@ public class Maze {
 		//dispMaze[1+sizeMaze[0]*2][2+sizeMaze[0]*4] = 'E';// Place the end point 
 		return (dispMaze);
 	}
+	
 
 
 }

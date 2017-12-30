@@ -121,7 +121,7 @@ public class Player {
 	}
 	
 	public void pickUpItem(Item item2Pick, Maze myMaze) {
-		if(this.inventory.get(0).getType() == "empty") {
+		if(this.inventory.get(0).getType().equals("empty")) {
 			this.inventory.set(0, item2Pick);
 		}else {
 		this.inventory.add(item2Pick);
@@ -135,7 +135,7 @@ public class Player {
 		int sizeInv = this.inventory.size();
 		boolean isInInv = false;
 		for(int i=0;i<sizeInv;i++) {
-			if (type == this.inventory.get(i).getType()) {
+			if (type == this.inventory.get(i).getName()) {
 				isInInv = true;
 			}
 		}
@@ -145,7 +145,7 @@ public class Player {
 		int sizeInv = this.inventory.size();
 		String disp="";
 		for(int i=0;i<sizeInv;i++) {
-			disp = disp+this.inventory.get(i).getType()+", ";
+			disp = disp+this.inventory.get(i).getName()+", ";
 		}
 		return disp;
 	}
@@ -154,7 +154,7 @@ public class Player {
 		int sizeInv = this.inventory.size();
 		int counter = 0;
 		for(int i=0;i<sizeInv;i++) {
-			if (type == this.inventory.get(i).getType()) {
+			if (type == this.inventory.get(i).getName()) {
 				counter++;
 			}
 		}
@@ -171,7 +171,7 @@ public class Player {
 	}
 
 	public void useItem(Item item2Use) {
-		switch (item2Use.getType()) {
+		switch (item2Use.getName()) {
 
 		case "Key":
 			break;
@@ -303,7 +303,6 @@ public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 		
 	}
 	
-
 	public void move(String direction, ArrayList <ArrayList<String>> mazeDescription) {
 
 		switch (direction) {
@@ -342,10 +341,22 @@ public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 		this.updateScore(-1);
 	}
 	
-	public void undoMove(Maze myMaze) {
-		//List<Point2D >newPosHistory = this.history.getPosition().remove(this.history.getPosition().size()-1);
-		// TODO implement undoMove
-		
+	public void undoMove() {
+
+		//Erase last move
+		this.history.eraseHistory();
+		//Update player current: position,inventory,step and score
+		this.currentPosition = new Point2D.Double(this.history.getPosition(this.history.getPosition().size()-1).getX(),this.history.getPosition(this.history.getPosition().size()-1).getY());
+		ArrayList<Item> inv2Add = new ArrayList<Item>();
+		for (int i=0; i<this.history.getInv(this.history.getInv().size()-1).size();i++) {
+			//clone the item 
+			Item item = new Item(this.history.getInv(this.history.getInv().size()-1).get(i).getType());
+			//store the item
+			inv2Add.add(item);
+		}
+		this.inventory = this.history.getInv(this.history.getInv().size()-1);
+		this.nbOfSteps = this.history.getStep(this.history.getStep().size()-1);
+		this.score     = this.history.getScore(this.history.getScore().size()-1);
 	}
 
 

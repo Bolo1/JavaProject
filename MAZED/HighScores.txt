@@ -1,3 +1,5 @@
 PLAYERNAME,MAZENAME,NUMBER_OF_STEPS_SOLVED,SCORE
 Boris,mazeEscape,36
 Boris,mazeEscape,36,112
+Boris,mazeEscape,42,58
+Boris,mazeEscape,42,169
