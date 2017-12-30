@@ -124,6 +124,12 @@ public class Game {
 						break;
 					case "undo":
 						//Undo last move
+						if (player.getCurrentPosition().getX()==0 & player.getCurrentPosition().getY()==0) {
+							//update text
+							frame.mazeText.clearText();
+							frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  player.getNbOfSteps()+"\nScore: "+ player.getScore());
+							frame.mazeText.updateText("\nYou cannot escape the maze by trying to go back in time!");
+						}else {
 						frame.buttonListener.resetWasPressed();					
 						player.undoMove();
 						//update text
@@ -132,7 +138,7 @@ public class Game {
 						frame.mazeText.updateText("\nYou went back in time");
 						//update maze
 						myMaze.display(player.getCurrentPosition(), frame.mazeConsole);
-						
+						}
 						
 						break;
 					case "AIsolving":
