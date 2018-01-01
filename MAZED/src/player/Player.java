@@ -28,13 +28,12 @@ public class Player {
 		//this.positions.add(this.currentPosition);
 		this.inventory.add(new Item("empty"));
 		this.nbOfSteps = 0;
-		this.score = 100;
 		this.lineOfSight=2;
 		
 		ArrayList<Item> invCopy = new ArrayList<Item>();
 		for (int i=0; i<this.inventory.size();i++) {
 			//clone the item 
-			Item item = new Item(this.inventory.get(i).getType());
+			Item item = new Item(this.inventory.get(i).getName());
 			//store the item
 			invCopy.add(item);
 		}
@@ -75,7 +74,11 @@ public class Player {
 	}
 	
 	public void updateScore(int score2add) {
+		
 		this.score = this.score+score2add;
+		if (this.score<0) {
+			this.score=0;
+		}
 	}
 	
 	public void printScore(String mazeName) {
@@ -109,7 +112,7 @@ public class Player {
 		ArrayList<Item> inv2Add = new ArrayList<Item>();
 		for (int i=0; i<this.inventory.size();i++) {
 			//clone the item 
-			Item item = new Item(this.inventory.get(i).getType());
+			Item item = new Item(this.inventory.get(i).getName());
 			//store the item
 			inv2Add.add(item);
 		}
@@ -121,7 +124,7 @@ public class Player {
 	}
 	
 	public void pickUpItem(Item item2Pick, Maze myMaze) {
-		if(this.inventory.get(0).getType().equals("empty")) {
+		if(this.inventory.get(0).getName().equals("empty")) {
 			this.inventory.set(0, item2Pick);
 		}else {
 		this.inventory.add(item2Pick);
@@ -131,11 +134,11 @@ public class Player {
 		myMaze.modDescription(index1, index2, "no");
 		
 	}
-	public boolean searchInventory(String type) {
+	public boolean searchInventory(String name) {
 		int sizeInv = this.inventory.size();
 		boolean isInInv = false;
 		for(int i=0;i<sizeInv;i++) {
-			if (type == this.inventory.get(i).getName()) {
+			if (name == this.inventory.get(i).getName()) {
 				isInInv = true;
 			}
 		}
@@ -252,7 +255,7 @@ public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 			break;
 
 		case "breakable":
-			canMove = searchInventory("Hammer");
+			canMove = searchInventory("hammer");
 			if (canMove) {
 				switch (dir) {
 				
@@ -295,7 +298,7 @@ public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 			break;
 
 		case "door":
-			canMove = searchInventory("Key");
+			canMove = searchInventory("key");
 			break;
 		}
 			this.setCanMove(mazeElem);
@@ -350,7 +353,7 @@ public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 		ArrayList<Item> inv2Add = new ArrayList<Item>();
 		for (int i=0; i<this.history.getInv(this.history.getInv().size()-1).size();i++) {
 			//clone the item 
-			Item item = new Item(this.history.getInv(this.history.getInv().size()-1).get(i).getType());
+			Item item = new Item(this.history.getInv(this.history.getInv().size()-1).get(i).getName());
 			//store the item
 			inv2Add.add(item);
 		}

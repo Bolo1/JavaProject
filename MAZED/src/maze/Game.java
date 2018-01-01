@@ -17,7 +17,7 @@ import javax.swing.Timer;
 
 
 public class Game {
-	public static void initGame()
+	public static void initGame(String fileName)
 	{
 		//UI initiation
 		MainUI frame = new MainUI();
@@ -41,18 +41,19 @@ public class Game {
 		frame.mazeText.updateText("You need to get out of there ! To help you here is a map of the maze\non which I will update your position.");
 
 		//Load, read and set the maze
-		File mazeFile = new File("mazeEscape-noSpecialWalls.txt");
-		String fileName = mazeFile.getName().substring(0, mazeFile.getName().lastIndexOf('.'));
+		File mazeFile = new File(fileName);
+		String fileNameNoExt = mazeFile.getName().substring(0, mazeFile.getName().lastIndexOf('.'));
 		//Call the read method from the class ReadsMazeFile giving the path of the file as input and store it in an 2D array list of string
 		ArrayList <ArrayList<String>> mazeDescription = Maze.read(mazeFile.getAbsolutePath());
-		Maze myMaze = new Maze (fileName,mazeDescription);
+		Maze myMaze = new Maze (fileNameNoExt,mazeDescription);
 
 		//display maze on console and on UI
 		myMaze.display();
 		myMaze.display(player.getCurrentPosition(),frame.mazeConsole);
 
 		int delay = 500; //To Refresh game every 0.5 sec
-
+		//Update initial score depending on the size of the maze
+		player.updateScore((myMaze.getSize()[0]+1)*(myMaze.getSize()[1]+1));
 		// Game is played with a timer that perform action every delay
 		final Timer gameTimer = new Timer(delay,null);
 		gameTimer.addActionListener(new ActionListener(){
@@ -91,10 +92,10 @@ public class Game {
 							case "no":
 								break;
 
-							case "S":
+							case "start":
 								break;
 
-							case "E":
+							case "end":
 								frame.mazeText.clearText();
 								frame.mazeText.updateText("You managed to escape the Dahaka ! In only "+player.getNbOfSteps() + " steps.\nYour score is "+ player.getScore()); 
 								player.printScore(myMaze.getName());
@@ -144,7 +145,9 @@ public class Game {
 					case "AIsolving":
 						switch(frame.buttonListener.getWasPressed()) {
 						case "Dijkstra":
-							Dijkstra.calc(myMaze);
+							int minStepDijkstra = Dijkstra.calc(myMaze);
+							frame.mazeText.clearText();
+							frame.mazeText.updateText("Dijkstra calculation was succesful !\nThe minimum number of step to go out of this maze is "+ minStepDijkstra +" steps.");
 							break;
 						case "":
 							break;

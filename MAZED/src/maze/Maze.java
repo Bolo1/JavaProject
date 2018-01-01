@@ -104,7 +104,7 @@ public class Maze {
 		for (int i=0; i<sizeMazeY; i++) {
 			String mazeElem = this.description.get(i).get(sizeMazeX-1);
 			switch (mazeElem) {
-			case "E": endPos[0] = Integer.parseInt(this.description.get(i).get(0));
+			case "end": endPos[0] = Integer.parseInt(this.description.get(i).get(0));
 					  endPos[1] = Integer.parseInt(this.description.get(i).get(1));
 			break;	
 			default:
@@ -121,7 +121,7 @@ public class Maze {
 		for (int i=0; i<sizeMazeY; i++) {
 			String mazeElem = this.description.get(i).get(sizeMazeX-1);
 			switch (mazeElem) {
-			case "S":
+			case "start":
 				startPos[0] = Integer.parseInt(this.description.get(i).get(0));
 				startPos[1] = Integer.parseInt(this.description.get(i).get(1));
 			break;
@@ -364,9 +364,9 @@ public class Maze {
 				
 				switch (objInCase)
 				{
-				case "S" : dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j] = 'S';  
+				case "start" : dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j] = 'S';  
 					break;
-				case "E" : dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j] = 'E';
+				case "end" : dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j] = 'E';
 					break;
 				default: //Do nothing by default, avoid having an empty case for "no" and allow to disregard object that would not be handled by the program yet
 				}	

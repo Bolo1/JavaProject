@@ -3,3 +3,5 @@ Boris,mazeEscape,36
 Boris,mazeEscape,36,112
 Boris,mazeEscape,42,58
 Boris,mazeEscape,42,169
+Boris,MazeLvl2,16,84
+Boris,MazeLvl2,16,9
