@@ -107,6 +107,9 @@ public class Maze {
 			case "end": endPos[0] = Integer.parseInt(this.description.get(i).get(0));
 					  endPos[1] = Integer.parseInt(this.description.get(i).get(1));
 			break;	
+			case "E": endPos[0] = Integer.parseInt(this.description.get(i).get(0));
+			  endPos[1] = Integer.parseInt(this.description.get(i).get(1));
+			  break;	
 			default:
 			break;
 			}
@@ -120,8 +123,13 @@ public class Maze {
 		int[] startPos={0,0};
 		for (int i=0; i<sizeMazeY; i++) {
 			String mazeElem = this.description.get(i).get(sizeMazeX-1);
+			
 			switch (mazeElem) {
 			case "start":
+				startPos[0] = Integer.parseInt(this.description.get(i).get(0));
+				startPos[1] = Integer.parseInt(this.description.get(i).get(1));
+			break;
+			case "S":
 				startPos[0] = Integer.parseInt(this.description.get(i).get(0));
 				startPos[1] = Integer.parseInt(this.description.get(i).get(1));
 			break;
@@ -366,8 +374,14 @@ public class Maze {
 				{
 				case "start" : dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j] = 'S';  
 					break;
-				case "end" : dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j] = 'E';
+					
+				case "S"     : dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j] = 'S';  
+				break;
+				
+				case "end"   : dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j] = 'E';
 					break;
+				case "E"     : dispMaze[((sizeMaze[0]+1)*2)-(i*2+1)][2+4*j] = 'E';
+				break;
 				default: //Do nothing by default, avoid having an empty case for "no" and allow to disregard object that would not be handled by the program yet
 				}	
 			}
@@ -462,5 +476,23 @@ public class Maze {
 			}
 		}	
 		return dispMaze;
+	}
+	
+	public static boolean checkMaze(ArrayList<ArrayList<String>> mazeDescription){
+		boolean startCalc = true;
+		
+		for (int i=0; i<mazeDescription.size();i++) {
+			if (startCalc) {
+				
+				for(int j=0; j<mazeDescription.get(i).size();j++) {
+					if (startCalc) {
+						if(mazeDescription.get(i).get(j).equals("fake")|mazeDescription.get(i).get(j).equals("breakable")|mazeDescription.get(i).get(j).equals("door")) {
+							startCalc = false;
+						}else {}
+					}else {break;}
+				}
+			}else {break;}
+		}
+		return startCalc;
 	}
 }

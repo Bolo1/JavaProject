@@ -158,7 +158,7 @@ public class MainUI extends JFrame{
 		AIAlg1.addActionListener(this.buttonListener);
 		AIAlg1.setActionCommand("AI1");
 		
-		JButton AIAlg2 = new JButton("AI2");
+		JButton AIAlg2 = new JButton("Tremaux");
 		AIAlg2.setBackground(Color.black);
 		AIAlg2.setForeground(Color.white);
 		AIAlg2.addActionListener(this.buttonListener);

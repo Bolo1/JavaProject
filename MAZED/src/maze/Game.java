@@ -4,6 +4,7 @@ import userInterface.MainUI;
 import userInterface.TextArea;
 import miscellaneousItem.Item;
 import mazeSolvingAlgorithm.Dijkstra;
+import mazeSolvingAlgorithm.Tremaux;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +33,10 @@ public class Game {
 		String input = JOptionPane.showInputDialog(
 				null, "Please Enter Your Name");
 		String playerName = input;
+		if (input==null) {
+			playerName = "Player";
+		}
+		
 		Point2D playerPosition = new Point2D.Double(0,0);
 		Player player = new Player(playerName,playerPosition);
 
@@ -149,7 +154,10 @@ public class Game {
 							frame.mazeText.clearText();
 							frame.mazeText.updateText("Dijkstra calculation was succesful !\nThe minimum number of step to go out of this maze is "+ minStepDijkstra +" steps.");
 							break;
-						case "":
+						case "Tremaux":
+							int stepTremaux = Tremaux.mainCalc(myMaze);
+							frame.mazeText.clearText();
+							frame.mazeText.updateText("Tremaux calculation was succesful !\nThe minimum number of step to go out of this maze is "+ stepTremaux +" steps.");
 							break;
 						}
 						frame.buttonListener.resetWasPressed();	
