@@ -5,11 +5,4 @@ Boris,mazeEscape,42,58
 Boris,mazeEscape,42,169
 Boris,MazeLvl2,16,84
 Boris,MazeLvl2,16,9
-Dijsktra,MazeEscape-noSpecialWalls,38,62
-Dijsktra,MazeEscape-noSpecialWalls,38,62
-Dijsktra,MazeEscape-noSpecialWalls,38,62
-Dijsktra,MazeEscape-noSpecialWalls,38,62
-Dijsktra,MazeEscape-noSpecialWalls,2147483647,0
-Dijsktra,MazeEscape-noSpecialWalls,32,68
-Dijsktra,MazeEscape-noSpecialWalls,32,68
-Dijsktra,MazeEscape-noSpecialWalls,38,62
+

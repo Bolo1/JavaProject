@@ -16,10 +16,11 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 public class Game {
+	static String mode;
 	public static void initGame(String fileName)
 	{
 		//UI initiation
-		MainUI frame = new MainUI();
+MainUI frame = new MainUI();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); //Full screen
 		frame.setVisible(true);//show the UI
@@ -51,10 +52,38 @@ public class Game {
 		Maze myMaze = new Maze (fileNameNoExt,mazeDescription);
 		//Update player position to the start of the maze (in case it is not in 0,0)
 		player.setPosition(new Point2D.Double(myMaze.getStart()[0],myMaze.getStart()[1]));
-
+		
+		String input2 = JOptionPane.showInputDialog(
+				null, "Do you want to play in hard mode (yes or no)");
+		if(input2!=null) {
+		switch(input2) {
+		case "yes":
+			Game.mode = "hard";
+			break;
+		case "Yes":
+			Game.mode = "hard";
+			break;
+		case "YES":
+			Game.mode = "hard";
+			break;
+		case "y":
+			Game.mode = "hard";
+			break;
+		case "Y":
+			Game.mode = "hard";
+			break;
+		default:
+			Game.mode = "normal";
+			myMaze.display();//console
+		}}else {
+			Game.mode ="normal";
+			System.out.println("User cancel the choice of the mode, continue with Normal");
+			myMaze.display();//console
+		}
+		
 		//display maze on console and on UI
-		myMaze.display();//console
-		myMaze.display(player.getCurrentPosition(),frame.mazeConsole);//UI
+		myMaze.display(player.getCurrentPosition(),frame.mazeConsole,Game.mode,player.getSight());//UI
+		
 
 		int delay = 500; //To Refresh game every 0.5 sec
 		//Update initial score depending on the size of the maze
@@ -81,7 +110,7 @@ public class Game {
 							player.move(frame.buttonListener.getWasPressed(), myMaze.getDescription());
 
 							//Refresh the maze
-							myMaze.display(player.getCurrentPosition(), frame.mazeConsole);
+							myMaze.display(player.getCurrentPosition(),frame.mazeConsole,Game.mode,player.getSight());
 
 							//Refresh text
 							frame.mazeText.clearText();
@@ -155,7 +184,7 @@ public class Game {
 							frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  player.getNbOfSteps()+"\nScore: "+ player.getScore());
 							frame.mazeText.updateText("\nYou went back in time");
 							//update maze
-							myMaze.display(player.getCurrentPosition(), frame.mazeConsole);
+							myMaze.display(player.getCurrentPosition(),frame.mazeConsole,Game.mode,player.getSight());
 						}
 
 						break;
@@ -192,7 +221,7 @@ public class Game {
 							frame.buttonListener.resetTypePressed();
 
 							//create a player for the AI
-							Player tremauxAlg = new Player("Dijsktra");
+							Player tremauxAlg = new Player("Tremaux");
 							tremauxAlg.updateScore((myMaze.getSize()[0]+1)*(myMaze.getSize()[1]+1));
 							//Tremaux calculation
 							int stepTremaux = Tremaux.mainCalc(myMaze);

@@ -36,28 +36,51 @@ public class Maze {
 	}
 
 	//Let us create a method to dipslay/refresh the maze. The method takes into account the player position and the UI console
-	public void display(Point2D playerPositions, TextArea mazeConsole)
+	public void display(Point2D playerPositions, TextArea mazeConsole, String mode,int lineOfSight)
 
-	{		
+	{	
+		
 		//convert the description to a 2D char array
 		char [][] maze2Display = this.toChar(this.description);
 		mazeConsole.clearText();//clear text on the console
 		int sizeMazeY = maze2Display.length;
-		//modify consecutively the maze2Display with the start pos(S) and the player position(P). By doing this in this order, it does not matter where the P is (e.g. start) the
-		//player will be able to see its position
+		//modify consecutively the maze2Display with the start pos(S) and the player position(P). By doing this in this order, 
+		//it does not matter where the P is (e.g. start) the player will be able to see its position
 		maze2Display[(sizeMazeY-1) - (this.startPos[0]*2 + 1)][2 + this.startPos[1] * 4] = 'S';
 		maze2Display[(sizeMazeY-1) - ((int) playerPositions.getX()*2 + 1)][2 + (int) playerPositions.getY() * 4] = 'P';
-
+		
+		if (mode.equalsIgnoreCase("Hard")){
 		//display the maze to the UIconsole line by line
-		for (char[] c:maze2Display)
-		{
-			String toPrint ="";
-			for(char d:c)
+		//if hardMode is chosen, only a part of the maze is displayed to the player depending on the line of Sight of the player (default = 2)
+			for (int e = 0; e< (lineOfSight*2)*2-1;e++) {
+				String toPrint ="";
+				for(int f = 0 ; f<(lineOfSight*2-1)*4; f++) {
+					if((sizeMazeY-1)-((int) playerPositions.getX()*2 + 1)-(lineOfSight*2-1)+e>maze2Display.length-1 |
+							(sizeMazeY-1)-((int) playerPositions.getX()*2 + 1)-(lineOfSight*2-1)+e<0|
+							2 + (int) playerPositions.getY() * 4-(lineOfSight*2+1)+f>maze2Display[0].length-1|
+							2 + (int) playerPositions.getY() * 4-(lineOfSight*2+1)+f<0) {
+						toPrint = " ";
+					}else {
+					toPrint = toPrint + maze2Display[(int) ((sizeMazeY-1)-(playerPositions.getX()*2 + 1)-(lineOfSight*2-1)+e)]
+							[(int) (2 + playerPositions.getY() * 4-(lineOfSight*2+1)+f)];
+					}
+				}
+				mazeConsole.updateText(toPrint+"\n");
+			}
+		}
+		else {//Otherwise, full display
+			for (char[] c:maze2Display)
 			{
-				toPrint =toPrint+d;
-			}				
-			mazeConsole.updateText(toPrint+"\n");				
-		}		
+				String toPrint ="";
+				for(char d:c)
+				{
+					toPrint =toPrint+d;
+				}				
+				mazeConsole.updateText(toPrint+"\n");				
+			}		
+			
+			
+		}
 
 	}
 	//display the Maze on the java console

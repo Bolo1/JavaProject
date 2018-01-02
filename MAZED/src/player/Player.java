@@ -25,7 +25,7 @@ public class Player {
 		this.name = playerName;
 		this.inventory.add(new Item("empty"));//inventory is initialized with an object called empty
 		this.nbOfSteps = 0;
-		this.lineOfSight=2;
+		this.lineOfSight=2;//default value
 		//copy content of the Inventory
 		ArrayList<Item> invCopy = new ArrayList<Item>();
 		for (int i=0; i<this.inventory.size();i++) {
