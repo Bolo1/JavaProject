@@ -6,30 +6,27 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
-
 import maze.Maze;
-import miscellaneousItem.Item;
+import item.Item;
 
 public class Player {
-	private String name;
-	private Point2D currentPosition;
-	private ArrayList<Item> inventory = new ArrayList<Item>();
+	
+	private String name;//name of the player
+	private Point2D currentPosition;// current Position on the maze
+	private ArrayList<Item> inventory = new ArrayList<Item>();//Inventory
 	private int lineOfSight;//Only used in hard mode
-	private String canMove="";
-	private int nbOfSteps;
-	private int score;
-	private PlayerHistory history;
-
-	public Player(String playerName, Point2D playerPosition)
+	private String canMove="";//String mentionning a reason why player could or not move==> maze element
+	private int nbOfSteps;// number of steps made in the maze
+	private int score;// Score, it is calculated as a function of the size of the maze - number of steps.
+	private PlayerHistory history;//Hold the history of the movement/inventory/scores/steps of the player
+	//constructor
+	public Player(String playerName)
 	{
 		this.name = playerName;
-		this.currentPosition = playerPosition;
-		//this.positions.add(this.currentPosition);
-		this.inventory.add(new Item("empty"));
+		this.inventory.add(new Item("empty"));//inventory is initialized with an object called empty
 		this.nbOfSteps = 0;
 		this.lineOfSight=2;
-		
+		//copy content of the Inventory
 		ArrayList<Item> invCopy = new ArrayList<Item>();
 		for (int i=0; i<this.inventory.size();i++) {
 			//clone the item 
@@ -37,78 +34,74 @@ public class Player {
 			//store the item
 			invCopy.add(item);
 		}
-		
-		this.history = new PlayerHistory(new Point2D.Double(0,0), invCopy, this.nbOfSteps, this.score);
+		//Initialize Player History ==> empty
+		this.history = new PlayerHistory();
 	}
 	
-
+	// to get the name of the player
 	public String getName() {
 		return (this.name);
 	}
 
-
+	// to set player position
 	public void setPosition(Point2D newPosition) {
 		this.currentPosition = newPosition;
 	}
-		
-	public void setCanMove(String reason) {
+	// to set canMove 
+	private void setCanMove(String reason) {
 		this.canMove = reason;
 	}
+	//to get can move
 	public String getCanMove () {
 		return canMove;
 	}
+	//to get the current position of the player
 	public Point2D getCurrentPosition(){
 		return this.currentPosition;
 	}
-	
+	//to update the number of steps
 	public void updateNbOfSteps(int step2add) {
 		this.nbOfSteps = this.nbOfSteps+step2add;
 	}
-	
+	// to get the current number of steps
 	public int getNbOfSteps() {
 		return this.nbOfSteps;
 	}
-	
+	//to get the score
 	public int getScore() {
 		return this.score;
 	}
-	
+	// to update score
 	public void updateScore(int score2add) {
-		
 		this.score = this.score+score2add;
-		if (this.score<0) {
+		if (this.score<0) {//score cannot be negative
 			this.score=0;
 		}
 	}
-	
+	//to print score in a high scores file
 	public void printScore(String mazeName) {
 		try (
-				FileWriter fileW   = new FileWriter("HighScores.txt",true);
+				FileWriter fileW   = new FileWriter("HighScores.txt",true);//open file
 				BufferedWriter bufferW = new BufferedWriter(fileW);
 				PrintWriter printerW = new PrintWriter(bufferW);){
-			printerW.println(this.getName() + ","+mazeName+","+this.nbOfSteps+","+this.score);
+			printerW.println(this.getName() + ","+mazeName+","+this.nbOfSteps+","+this.score);//write in fike
 		}catch(IOException i) {
 			i.printStackTrace();
 		}
-
 	}
-	public ArrayList<Item> getInventory(){
-		return (this.inventory);
-
-	}
-
+	// to get player sight (only hardMode)
 	public int getSight() {
 		return lineOfSight;
 	}
-
-	public void increaseSight(int bonus) {
+	//to increases sight (only hardMode)
+	private void increaseSight(int bonus) {
 		this.lineOfSight+=bonus;
 	}
-
-	
+	//Update History
 	public void updateHistory() {
-		
+		//clone the position
 		Point2D position2Add= new Point2D.Double(this.currentPosition.getX(),this.currentPosition.getY());
+		//clone the inventory
 		ArrayList<Item> inv2Add = new ArrayList<Item>();
 		for (int i=0; i<this.inventory.size();i++) {
 			//clone the item 
@@ -116,25 +109,29 @@ public class Player {
 			//store the item
 			inv2Add.add(item);
 		}
+		//update the history
 		this.history.update(position2Add, inv2Add, this.nbOfSteps, this.score);
 	}
-	
-	public List<Point2D> getPosHistory(){
-		return this.history.getPosition();
-	}
-	
+
+	// to get the full inventory of the player
+		public ArrayList<Item> getInventory(){
+			return (this.inventory);
+		}
+	//to store item in player inventory
 	public void pickUpItem(Item item2Pick, Maze myMaze) {
 		if(this.inventory.get(0).getName().equals("empty")) {
 			this.inventory.set(0, item2Pick);
 		}else {
-		this.inventory.add(item2Pick);
+		this.inventory.add(item2Pick);//store item in inventory
 		}
+		//delete the object in the maze description
 		int index1 = 1+(int)this.currentPosition.getX()*(myMaze.getSize()[0]+1)+(int) this.currentPosition.getY();
 		int index2 = myMaze.getNElemDesc()-1;
 		myMaze.modDescription(index1, index2, "no");
 		
 	}
-	public boolean searchInventory(String name) {
+	//to search for a specific object inside the inventory
+	private boolean searchInventory(String name) {
 		int sizeInv = this.inventory.size();
 		boolean isInInv = false;
 		for(int i=0;i<sizeInv;i++) {
@@ -144,6 +141,7 @@ public class Player {
 		}
 		return isInInv;
 	}
+	//to display inventory
 	public String displayInventory() {
 		int sizeInv = this.inventory.size();
 		String disp="";
@@ -152,27 +150,8 @@ public class Player {
 		}
 		return disp;
 	}
-
-	public int countInventory(String type) {
-		int sizeInv = this.inventory.size();
-		int counter = 0;
-		for(int i=0;i<sizeInv;i++) {
-			if (type == this.inventory.get(i).getName()) {
-				counter++;
-			}
-		}
-		return counter;
-	}
-	public int scoreInventory() {
-		
-		int sizeInv = this.inventory.size();
-		int score = 0;
-		for(int i=0;i<sizeInv;i++) {
-			score = score + this.inventory.get(i).getScoreVal();
-		}
-		return score;
-	}
-
+	
+	// to use the item when picked up
 	public void useItem(Item item2Use) {
 		switch (item2Use.getName()) {
 
@@ -180,6 +159,7 @@ public class Player {
 			break;
 
 		case "Trophy":
+			//increase score
 			this.updateScore(item2Use.getScoreVal());
 			break;
 
@@ -198,14 +178,15 @@ public class Player {
 		}
 	}
 
-
+	//Determine if the player can move or not, for this, the method check if there is a wall in the path of the player
 	public boolean canMove(String dir, Maze myMaze) {
 
 		boolean canMove = false;
-		switch (dir) {
+		switch (dir) {//depending on the direction it checks a different wall
 
 		case "Up":{
 			int indexWall = 2;
+			//check if wall allow to move
 			canMove=checkWall(myMaze,indexWall,dir);
 			break;
 		}
@@ -226,12 +207,12 @@ public class Player {
 			break;
 		}
 		default :
-			canMove =  false;
+			System.err.println("Unknown Direction required by player");
 		}
 		return canMove;
 	}
-	
-public boolean checkWall(Maze myMaze, int indexWall, String dir) {
+	//check walls to see if player can move
+private boolean checkWall(Maze myMaze, int indexWall, String dir) {
 		
 		int indexX = (int) this.currentPosition.getX();
 		int indexY = (int) this.currentPosition.getY();
@@ -240,7 +221,7 @@ public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 		String mazeElem = myMaze.getDescription(index1,indexWall);
 		boolean canMove = false;
 		
-		switch (mazeElem) {
+		switch (mazeElem) {//Action depends on the type of maze elem between the player and the new position he wishes to go
 		
 		case "wall":
 			canMove =  false;
@@ -255,7 +236,9 @@ public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 			break;
 
 		case "breakable":
+			//if breakable, search inventory to find a hammer
 			canMove = searchInventory("hammer");
+			//if has a hammer, wall will be destroyed and erased from the description
 			if (canMove) {
 				switch (dir) {
 				
@@ -298,17 +281,19 @@ public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 			break;
 
 		case "door":
+			//if door, search inventory for a key
 			canMove = searchInventory("key");
 			break;
 		}
+		//set canMove to maze elem so later we can display a specific message to the player keeping him/her aware of what he did or why it was not possible to do
 			this.setCanMove(mazeElem);
 		return canMove;
 		
 	}
-	
+	//Move the player
 	public void move(String direction, ArrayList <ArrayList<String>> mazeDescription) {
 
-		switch (direction) {
+		switch (direction) {//movement depends on the direction pressed by the player
 
 		case "Up": {
 			int yPos = (int) this.currentPosition.getY();
@@ -343,7 +328,7 @@ public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 		//Decrease the score by the number of steps
 		this.updateScore(-1);
 	}
-	
+	//To go back on a move
 	public void undoMove() {
 
 		//Erase last move
@@ -357,6 +342,7 @@ public boolean checkWall(Maze myMaze, int indexWall, String dir) {
 			//store the item
 			inv2Add.add(item);
 		}
+		//update current values
 		this.inventory = this.history.getInv(this.history.getInv().size()-1);
 		this.nbOfSteps = this.history.getStep(this.history.getStep().size()-1);
 		this.score     = this.history.getScore(this.history.getScore().size()-1);

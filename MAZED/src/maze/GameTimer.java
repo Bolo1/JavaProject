@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 public class GameTimer implements ActionListener {
+	//Allow to stop the game from inside the actionPerformed method
 	private Timer timer;
 	
 	public void start() {

@@ -3,8 +3,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MyButtonListener implements ActionListener {
-	private String wasPressed = "";
-	private String typePressed="";
+	private String wasPressed = "";//keep track of whether a button was pressed
+	private String typePressed="";//keep track of the type of button pressed
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
@@ -49,16 +49,19 @@ public class MyButtonListener implements ActionListener {
 		}
 		
 	}
+	//to get which button was pressed
 	public String getWasPressed() {
 		return this.wasPressed;
 	}
-	
+	//to reset wasPressed
 	public void resetWasPressed() {
 		this.wasPressed = "";
 	}
+	//to get the type of button that was pressed 
 	public String getTypePressed() {
 		return this.typePressed;
 	}
+	//to Reset the type
 	public void resetTypePressed() {
 		this.typePressed="";
 	}
