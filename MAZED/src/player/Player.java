@@ -10,7 +10,7 @@ import maze.Maze;
 import item.Item;
 
 public class Player {
-	
+
 	private String name;//name of the player
 	private Point2D currentPosition;// current Position on the maze
 	private ArrayList<Item> inventory = new ArrayList<Item>();//Inventory
@@ -37,7 +37,7 @@ public class Player {
 		//Initialize Player History ==> empty
 		this.history = new PlayerHistory();
 	}
-	
+
 	// to get the name of the player
 	public String getName() {
 		return (this.name);
@@ -114,21 +114,21 @@ public class Player {
 	}
 
 	// to get the full inventory of the player
-		public ArrayList<Item> getInventory(){
-			return (this.inventory);
-		}
+	public ArrayList<Item> getInventory(){
+		return (this.inventory);
+	}
 	//to store item in player inventory
 	public void pickUpItem(Item item2Pick, Maze myMaze) {
 		if(this.inventory.get(0).getName().equals("empty")) {
 			this.inventory.set(0, item2Pick);
 		}else {
-		this.inventory.add(item2Pick);//store item in inventory
+			this.inventory.add(item2Pick);//store item in inventory
 		}
 		//delete the object in the maze description
 		int index1 = 1+(int)this.currentPosition.getX()*(myMaze.getSize()[0]+1)+(int) this.currentPosition.getY();
 		int index2 = myMaze.getNElemDesc()-1;
 		myMaze.modDescription(index1, index2, "no");
-		
+
 	}
 	//to search for a specific object inside the inventory
 	private boolean searchInventory(String name) {
@@ -150,7 +150,7 @@ public class Player {
 		}
 		return disp;
 	}
-	
+
 	// to use the item when picked up
 	public void useItem(Item item2Use) {
 		switch (item2Use.getName()) {
@@ -212,17 +212,17 @@ public class Player {
 		return canMove;
 	}
 	//check walls to see if player can move
-private boolean checkWall(Maze myMaze, int indexWall, String dir) {
-		
+	private boolean checkWall(Maze myMaze, int indexWall, String dir) {
+
 		int indexX = (int) this.currentPosition.getX();
 		int indexY = (int) this.currentPosition.getY();
 		int sizeMaze = myMaze.getSize()[0];
 		int index1 = 1 + indexX * (sizeMaze + 1) + indexY;
 		String mazeElem = myMaze.getDescription(index1,indexWall);
 		boolean canMove = false;
-		
+
 		switch (mazeElem) {//Action depends on the type of maze elem between the player and the new position he wishes to go
-		
+
 		case "wall":
 			canMove =  false;
 			break;
@@ -241,7 +241,7 @@ private boolean checkWall(Maze myMaze, int indexWall, String dir) {
 			//if has a hammer, wall will be destroyed and erased from the description
 			if (canMove) {
 				switch (dir) {
-				
+
 				case "Up":{
 					myMaze.modDescription(index1, indexWall, "no");
 					int index2 = 1 + (indexX-1) * (sizeMaze + 1) + indexY;
@@ -249,7 +249,7 @@ private boolean checkWall(Maze myMaze, int indexWall, String dir) {
 					myMaze.modDescription(index2, index3, "no");
 					break;
 				}
-				
+
 				case "Down":{
 					myMaze.modDescription(index1, indexWall, "no");
 					int index2 = 1 + (indexX-1) * (sizeMaze + 1) + indexY;
@@ -257,7 +257,7 @@ private boolean checkWall(Maze myMaze, int indexWall, String dir) {
 					myMaze.modDescription(index2, index3, "no");
 					break;
 				}
-				
+
 				case "Left":{
 					myMaze.modDescription(index1, indexWall, "no");
 					int index2 = 1 + indexX * (sizeMaze + 1) + indexY-1;
@@ -265,7 +265,7 @@ private boolean checkWall(Maze myMaze, int indexWall, String dir) {
 					myMaze.modDescription(index2, index3, "no");
 					break;
 				}
-				
+
 				case "Right":{
 					myMaze.modDescription(index1, indexWall, "no");
 					int index2 = 1 + indexX * (sizeMaze + 1) + indexY+1;
@@ -273,11 +273,11 @@ private boolean checkWall(Maze myMaze, int indexWall, String dir) {
 					myMaze.modDescription(index2, index3, "no");
 					break;
 				}
-			    }
-				
+				}
+
 			}else {
 			}
-			
+
 			break;
 
 		case "door":
@@ -286,9 +286,9 @@ private boolean checkWall(Maze myMaze, int indexWall, String dir) {
 			break;
 		}
 		//set canMove to maze elem so later we can display a specific message to the player keeping him/her aware of what he did or why it was not possible to do
-			this.setCanMove(mazeElem);
+		this.setCanMove(mazeElem);
 		return canMove;
-		
+
 	}
 	//Move the player
 	public void move(String direction, ArrayList <ArrayList<String>> mazeDescription) {
@@ -350,6 +350,6 @@ private boolean checkWall(Maze myMaze, int indexWall, String dir) {
 
 
 }
-	
-	
+
+
 

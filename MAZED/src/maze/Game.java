@@ -50,8 +50,8 @@ public class Game {
 		//create maze Object based on name and description
 		Maze myMaze = new Maze (fileNameNoExt,mazeDescription);
 		//Update player position to the start of the maze (in case it is not in 0,0)
-				player.setPosition(new Point2D.Double(myMaze.getStart()[0],myMaze.getStart()[1]));
-				
+		player.setPosition(new Point2D.Double(myMaze.getStart()[0],myMaze.getStart()[1]));
+
 		//display maze on console and on UI
 		myMaze.display();//console
 		myMaze.display(player.getCurrentPosition(),frame.mazeConsole);//UI
@@ -162,15 +162,15 @@ public class Game {
 					case "AIsolving"://Allow to solve the maze automatically ==> give a number of step to go out of the maze
 						switch(frame.buttonListener.getWasPressed()) {
 						case "Dijkstra":
-							
+
 							//Reset the button indicator
 							frame.buttonListener.resetWasPressed();
 							frame.buttonListener.resetTypePressed();
-							
+
 							//create a player for the AI
 							Player dijkstraAlg = new Player("Dijsktra");
 							dijkstraAlg.updateScore((myMaze.getSize()[0]+1)*(myMaze.getSize()[1]+1));
-							
+
 							//Dijkstra implementation
 							int minStepDijkstra = Dijkstra.calc(myMaze);
 							//update score
@@ -182,15 +182,15 @@ public class Game {
 							frame.mazeText.updateText("Dijkstra calculation was succesful !\nThe minimum number of step to go out of this maze is "+ minStepDijkstra +" steps.\nThe equivalent score is "+dijkstraAlg.getScore());
 							//Print score
 							dijkstraAlg.printScore(myMaze.getName());
-							
+
 							break;
-							
+
 						case "Tremaux":
-							
+
 							//Reset the button indicator
 							frame.buttonListener.resetWasPressed();
 							frame.buttonListener.resetTypePressed();
-							
+
 							//create a player for the AI
 							Player tremauxAlg = new Player("Dijsktra");
 							tremauxAlg.updateScore((myMaze.getSize()[0]+1)*(myMaze.getSize()[1]+1));

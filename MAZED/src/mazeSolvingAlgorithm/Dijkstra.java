@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import maze.Maze;
 
 public class Dijkstra {
-		
+
 	public static int calc(Maze myMaze) {
 		//extract a node map where wall are marked as true and other element are marked as false
 		boolean [][] nodeMap = myMaze.toBool(myMaze.getDescription());
@@ -23,7 +23,7 @@ public class Dijkstra {
 			int count = 0;
 			int distVertex = 1;//nb of step between Vertex
 			//loop until all nodes are considered
-			
+
 			while (sptSet[idx2EndMaze] == false) {//Stop when the vertex of the exit of the maze is treated
 				//update counter
 				count++;
@@ -52,7 +52,7 @@ public class Dijkstra {
 			System.err.println("Calculation aborted, the maze contains element (e.g. Breakable, fake wall) that cannot currently be handled by the implemented Dijkstra algorithm");
 		}
 		return distances.get(idx2EndMaze)[0];
-		
+
 	}
 
 }

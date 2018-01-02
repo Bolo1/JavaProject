@@ -1,9 +1,6 @@
 package userInterface;
 
 import javax.swing.*;
-
-//import maze.MazeMain;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -94,7 +91,7 @@ public class MainUI extends JFrame{
 		buttonUp.setToolTipText("Alt+W");
 		buttonUp.addActionListener(this.buttonListener);
 		buttonUp.setActionCommand("Up");
-		
+
 		buttonPanel.add(buttonUp, c);
 
 		MyArrowButton buttonLeft = new MyArrowButton ((MyArrowButton.WEST));
@@ -133,28 +130,28 @@ public class MainUI extends JFrame{
 		buttonPanel2.setLayout(layoutButtonPanel2);
 		buttonPanel2.setBackground(Color.darkGray);
 		contentPane.add(buttonPanel2);
-		
+
 		//undo button
 		JButton undoButton = new JButton("undo");
 		undoButton.setBackground(Color.black);
 		undoButton.setForeground(Color.white);
 		undoButton.addActionListener(this.buttonListener);
 		undoButton.setActionCommand("undo");
-		
+
 		//First AI algorithm ==> Dijskra
 		JButton AIAlg1 = new JButton("DijskraCalc");
 		AIAlg1.setBackground(Color.black);
 		AIAlg1.setForeground(Color.white);
 		AIAlg1.addActionListener(this.buttonListener);
 		AIAlg1.setActionCommand("AI1");
-		
+
 		//Second AI algorithm ==> Tremaux
 		JButton AIAlg2 = new JButton("Tremaux");
 		AIAlg2.setBackground(Color.black);
 		AIAlg2.setForeground(Color.white);
 		AIAlg2.addActionListener(this.buttonListener);
 		AIAlg2.setActionCommand("AI2");
-		
+
 		buttonPanel2.add(undoButton);
 		buttonPanel2.add(AIAlg1);
 		buttonPanel2.add(AIAlg2);

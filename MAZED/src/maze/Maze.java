@@ -49,12 +49,12 @@ public class Maze {
 		maze2Display[(sizeMazeY-1) - ((int) playerPositions.getX()*2 + 1)][2 + (int) playerPositions.getY() * 4] = 'P';
 
 		//display the maze to the UIconsole line by line
-		for (char[] u:maze2Display)
+		for (char[] c:maze2Display)
 		{
 			String toPrint ="";
-			for(char v:u)
+			for(char d:c)
 			{
-				toPrint =toPrint+v;
+				toPrint =toPrint+d;
 			}				
 			mazeConsole.updateText(toPrint+"\n");				
 		}		
@@ -64,12 +64,12 @@ public class Maze {
 	public void display()
 	{
 		char [][] maze2Display = this.toChar(this.description);
-		for (char[] u:maze2Display)
+		for (char[] c:maze2Display)
 		{
 			String toPrint ="";
-			for(char v:u)
+			for(char d:c)
 			{
-				toPrint =toPrint+v;
+				toPrint =toPrint+d;
 			}
 			System.out.println(toPrint);
 		}
@@ -390,7 +390,7 @@ public class Maze {
 		}
 		return (dispMaze);
 	}
-		
+
 	//smaller version in boolean, only used for mazeSolving
 	public boolean[][] toBool(ArrayList <ArrayList<String>> description)
 	{
@@ -482,7 +482,7 @@ public class Maze {
 	}
 	//Check if Maze content contains fake wall or breakables,...
 	public static boolean checkMaze(ArrayList<ArrayList<String>> mazeDescription){
-		
+
 		boolean startCalc = true;
 		//loop through the maze element
 		for (int i=0; i<mazeDescription.size();i++) {

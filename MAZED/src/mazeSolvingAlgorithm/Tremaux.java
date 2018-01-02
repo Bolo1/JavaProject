@@ -24,7 +24,7 @@ public class Tremaux {
 			int prevNode = currentNode;
 			//put the mark of the current node to 0 (unvisited)
 			marks.set(currentNode, new int [] {0,marks.get(currentNode)[1],marks.get(currentNode)[2]});
-			
+
 			while (currentNode != idx2EndMaze) {//as long as the current Node is not the exit of the maze, keep iterating
 				//update counter
 				count++;
@@ -46,7 +46,7 @@ public class Tremaux {
 				marks.set(currentNode, new int [] {marks.get(currentNode)[0]+1,marks.get(currentNode)[1],marks.get(currentNode)[2]});
 				//current Node becomes new node
 				currentNode = newNode;
-				
+
 				//avoid infinite loop
 				if (count>1000) {
 					System.err.println("Calculation exited after 1000 iterations");
@@ -55,7 +55,7 @@ public class Tremaux {
 			}
 			//Count number of steps for "most straightforward" path found
 			nStep = stepCalc(marks,currentNode,myMaze.getSize(),nodeMap);
-			
+
 		}else {
 			System.err.println("Calculation aborted, the maze contains element (e.g. Breakable, fake wall) that cannot currently be handled by the implemented Trémeaux algorithm");
 		}
@@ -144,68 +144,68 @@ public class Tremaux {
 				}
 			}
 		}
-		
+
 		if(counter==1 & marks.get(currentNode)[0]<2) {//if only 1 path dead end
 			marks.set(currentNode, new int [] {marks.get(currentNode)[0]+1,marks.get(currentNode)[1],marks.get(currentNode)[2]});//mark it once more so we do not go there again
 			idx2NewNode = idx2Adj[idx2Choices.get(0)];//the only choice available is taken
 		}else {
-				
-				if(markCounter0 == counter-1) {//if unmarked possibilities = possibilities (except back) then keep going in the same direction
-					int idx2Dir = -1;
-					//keep going in the same direction
-					int dirVal = currentNode-prevNode;
-					switch(dirVal){
-					case 10:{
-						 idx2Dir = Method.findIdxArray(idx2Adj,currentNode+dirVal);
-						break;
-					}
-					case -10:{
-						idx2Dir = Method.findIdxArray(idx2Adj,currentNode+dirVal);
-						break;
-					}
-					case 1:{
-						idx2Dir = Method.findIdxArray(idx2Adj,currentNode+dirVal);
-						break;
-						
-					}
-					case -1:{
-						idx2Dir = Method.findIdxArray(idx2Adj,currentNode+dirVal);
-						break;
-					}
-					default:{
-						System.err.println("Error finding direction");
-					}					
-					}
-					 if(idx2Dir>0){//if direction was found (no wall in front)
-						 
-						idx2NewNode = idx2Adj[idx2Dir];
-						
-					}else {//otherwise
-						
-						idx2NewNode = idx2Adj[idx2Mark0.get(0)];//take one of the unmarked path
-					}
-					 
-				}else {//if the different possibilities have different marking (some explored some not)
-					
-					if(marks.get(prevNode)[0]<2) {// if we can potentially go back, do so
-						
-						idx2NewNode = idx2Adj[idx2PrevNode];
-					}else {//if we cannot go back (visited twice) take the path with the smallest mark
-						
-						if(!idx2Mark0.isEmpty())
-							
-							idx2NewNode = idx2Adj[idx2Mark0.get(0)];
-						
-						else if(!idx2Mark1.isEmpty())
-							
-							idx2NewNode = idx2Adj[idx2Mark1.get(0)];
-						
-						else
-							
-							System.err.println("Error no possibilities to move");
-						
-					}		
+
+			if(markCounter0 == counter-1) {//if unmarked possibilities = possibilities (except back) then keep going in the same direction
+				int idx2Dir = -1;
+				//keep going in the same direction
+				int dirVal = currentNode-prevNode;
+				switch(dirVal){
+				case 10:{
+					idx2Dir = Method.findIdxArray(idx2Adj,currentNode+dirVal);
+					break;
 				}
+				case -10:{
+					idx2Dir = Method.findIdxArray(idx2Adj,currentNode+dirVal);
+					break;
+				}
+				case 1:{
+					idx2Dir = Method.findIdxArray(idx2Adj,currentNode+dirVal);
+					break;
+
+				}
+				case -1:{
+					idx2Dir = Method.findIdxArray(idx2Adj,currentNode+dirVal);
+					break;
+				}
+				default:{
+					System.err.println("Error finding direction");
+				}					
+				}
+				if(idx2Dir>0){//if direction was found (no wall in front)
+
+					idx2NewNode = idx2Adj[idx2Dir];
+
+				}else {//otherwise
+
+					idx2NewNode = idx2Adj[idx2Mark0.get(0)];//take one of the unmarked path
+				}
+
+			}else {//if the different possibilities have different marking (some explored some not)
+
+				if(marks.get(prevNode)[0]<2) {// if we can potentially go back, do so
+
+					idx2NewNode = idx2Adj[idx2PrevNode];
+				}else {//if we cannot go back (visited twice) take the path with the smallest mark
+
+					if(!idx2Mark0.isEmpty())
+
+						idx2NewNode = idx2Adj[idx2Mark0.get(0)];
+
+					else if(!idx2Mark1.isEmpty())
+
+						idx2NewNode = idx2Adj[idx2Mark1.get(0)];
+
+					else
+
+						System.err.println("Error no possibilities to move");
+
+				}		
+			}
 		}
 
 		return idx2NewNode;

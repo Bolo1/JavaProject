@@ -12,14 +12,14 @@ public class PlayerHistory {
 	private ArrayList<ArrayList<Item>> inventory;
 	private ArrayList<Integer> step;
 	private ArrayList<Integer> score;	
-	
+
 	public PlayerHistory() {//initalize the object with no value, content are initialize later when the setting of the game is finished
 		//initialize the Arraylist
 		this.position  = new ArrayList<Point2D> ();
 		this.inventory = new ArrayList<ArrayList<Item>>();
 		this.step      = new ArrayList<Integer> ();
 		this.score 	   = new ArrayList<Integer> ();	
-		
+
 	}	
 	//to get the full history of the position
 	public List<Point2D> getPosition() {
@@ -31,7 +31,7 @@ public class PlayerHistory {
 	}
 	//update the history of the positions
 	private void updatePosition(Point2D playerPos){
-		
+
 		//clone List
 		List <Point2D> newPos = new ArrayList <Point2D>();
 		for (int i = 0; i<this.position.size();i++)
@@ -44,8 +44,8 @@ public class PlayerHistory {
 	}
 	// get full inventory history
 	public ArrayList<ArrayList<Item>> getInv(){
-			return inventory;
-		}
+		return inventory;
+	}
 	//get specific inventory of the list
 	public ArrayList<Item> getInv(int index){
 		return inventory.get(index);
@@ -93,6 +93,6 @@ public class PlayerHistory {
 		this.updateScore(score);
 	}
 
-	
+
 
 }
