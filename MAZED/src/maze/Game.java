@@ -96,7 +96,14 @@ MainUI frame = new MainUI();
 		gameTimer.addActionListener(new ActionListener(){
 			//Action to be repeated at each timer
 			public void actionPerformed (ActionEvent evt) {
-
+				if(player.getBlocked()>0) {
+					player.updateNbOfSteps(1);
+					player.updateBlocked(-1);
+					frame.mazeText.clearText();
+					frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +
+					player.getNbOfSteps()+"\nScore: "+ player.getScore()+"\n You are still blocked by the trap for: "+player.getBlocked());
+					
+				}else {
 				//Check if a button was pressed
 				if (frame.buttonListener.getWasPressed()!="") {
 					//action depending on which button type
@@ -114,7 +121,8 @@ MainUI frame = new MainUI();
 
 							//Refresh text
 							frame.mazeText.clearText();
-							frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +  player.getNbOfSteps()+"\nScore: "+ player.getScore());
+							frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " +
+							player.getNbOfSteps()+"\nScore: "+ player.getScore());
 
 							//Add text when player cross special elements
 							displaySpeInfo(player.getCanMove(), frame.mazeText, canMove);
@@ -150,12 +158,22 @@ MainUI frame = new MainUI();
 								Item item = new Item(object);
 								// store the item in player inventory
 								player.pickUpItem(item, myMaze);
-								//use item==> only use instantanious object e.g. Torch 
+								//use item==> only use instantanious object e.g. Torch, trap
 								player.useItem(item);
-								//Update Text to inform player
 								frame.mazeText.clearText();
-								frame.mazeText.updateText("Inventory:"+player.displayInventory()+"\nNumber of Steps: " + player.getNbOfSteps()+ "\nScore: "+player.getScore()+"\nYou Picked up a "+ item.getName());
+								if(item.getName().equalsIgnoreCase("trap"))
+								{
+									frame.mazeText.updateText("Inventory:"+player.displayInventory()+
+											"\nNumber of Steps: " + player.getNbOfSteps()+ "\nScore: "
+											+player.getScore()+"\nYou fell in a "+ item.getName() + "!!!");
+								}else {
+								//Update Text to inform player
+								
+								frame.mazeText.updateText("Inventory:"+player.displayInventory()+
+										"\nNumber of Steps: " + player.getNbOfSteps()+ "\nScore: "
+										+player.getScore()+"\nYou Picked up a "+ item.getName());
 								break;
+								}
 							}
 
 							//Update player History 
@@ -242,6 +260,7 @@ MainUI frame = new MainUI();
 						break;
 					}
 				}
+			}
 			}
 		});
 		//Start the timer

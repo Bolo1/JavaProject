@@ -20,12 +20,14 @@ public class Player {
 	private int score;// Score, it is calculated as a function of the size of the maze - number of steps.
 	private PlayerHistory history;//Hold the history of the movement/inventory/scores/steps of the player
 	//constructor
+	private int blocked = 0;
 	public Player(String playerName)
 	{
 		this.name = playerName;
 		this.inventory.add(new Item("empty"));//inventory is initialized with an object called empty
 		this.nbOfSteps = 0;
 		this.lineOfSight=2;//default value
+		this.blocked=0;//player is not blocked by default
 		//copy content of the Inventory
 		ArrayList<Item> invCopy = new ArrayList<Item>();
 		for (int i=0; i<this.inventory.size();i++) {
@@ -112,6 +114,14 @@ public class Player {
 		//update the history
 		this.history.update(position2Add, inv2Add, this.nbOfSteps, this.score);
 	}
+	//to get blocked and know if player is blocked or not
+	public int getBlocked() {
+		return this.blocked;
+	}
+	
+	public void updateBlocked(int val) {
+		this.blocked+=val;
+	}
 
 	// to get the full inventory of the player
 	public ArrayList<Item> getInventory(){
@@ -119,10 +129,14 @@ public class Player {
 	}
 	//to store item in player inventory
 	public void pickUpItem(Item item2Pick, Maze myMaze) {
+		if (item2Pick.getName().equalsIgnoreCase("trap")) {
+			
+		}else {
 		if(this.inventory.get(0).getName().equals("empty")) {
 			this.inventory.set(0, item2Pick);
 		}else {
 			this.inventory.add(item2Pick);//store item in inventory
+		}
 		}
 		//delete the object in the maze description
 		int index1 = 1+(int)this.currentPosition.getX()*(myMaze.getSize()[0]+1)+(int) this.currentPosition.getY();
@@ -155,25 +169,25 @@ public class Player {
 	public void useItem(Item item2Use) {
 		switch (item2Use.getName()) {
 
-		case "Key":
+		case "key":
 			break;
 
-		case "Trophy":
+		case "trophy":
 			//increase score
 			this.updateScore(item2Use.getScoreVal());
 			break;
 
-		case "Hammer":
+		case "hammer":
 			break;
 
-		case "Light":
-			//Light increase Sight
+		case "torch":
+			//torch increase Sight
 			this.increaseSight(2);
 			break;
 
-		case "Trap":
+		case "trap":
 			//Traps increase the number of step you make
-			this.updateNbOfSteps(5);
+			this.blocked=10;
 			break;
 		}
 	}

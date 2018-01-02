@@ -14,7 +14,7 @@ Xcoordinate,Ycoordinate,northWall,southWall,eastWall,westWall,Object
 1,2,breakable,wall,no,wall,trophy
 1,3,wall,wall,wall,no,no
 1,4,no,no,no,wall,no
-1,5,no,wall,wall,no,no
+1,5,no,wall,wall,no,torch
 1,6,no,no,no,wall,no
 1,7,no,no,wall,no,no
 1,8,no,wall,wall,wall,no
@@ -40,7 +40,7 @@ Xcoordinate,Ycoordinate,northWall,southWall,eastWall,westWall,Object
 3,8,no,no,wall,wall,no
 3,9,no,wall,wall,wall,no
 4,0,no,no,wall,wall,no
-4,1,no,no,no,wall,no
+4,1,no,no,no,wall,trap
 4,2,door,no,no,no,no
 4,3,no,no,wall,no,no
 4,4,wall,wall,wall,wall,no
@@ -54,7 +54,7 @@ Xcoordinate,Ycoordinate,northWall,southWall,eastWall,westWall,Object
 5,2,wall,door,wall,wall,trophy
 5,3,no,no,no,wall,no
 5,4,wall,wall,no,no,no
-5,5,wall,no,no,no,no
+5,5,fake,no,no,no,no
 5,6,no,no,no,no,no
 5,7,no,no,wall,no,no
 5,8,wall,no,no,wall,no
@@ -63,8 +63,8 @@ Xcoordinate,Ycoordinate,northWall,southWall,eastWall,westWall,Object
 6,1,no,no,no,fake,no
 6,2,wall,wall,no,no,no
 6,3,no,no,wall,no,no
-6,4,wall,wall,no,wall,no
-6,5,wall,wall,wall,no,no
+6,4,wall,wall,no,wall,trap
+6,5,wall,fake,wall,no,no
 6,6,no,no,no,wall,no
 6,7,no,no,wall,no,no
 6,8,no,wall,fake,wall,no
@@ -76,7 +76,7 @@ Xcoordinate,Ycoordinate,northWall,southWall,eastWall,westWall,Object
 7,4,wall,wall,no,no,no
 7,5,no,wall,no,no,no
 7,6,no,no,no,no,no
-7,7,no,no,wall,no,no
+7,7,no,no,wall,no,light
 7,8,no,no,wall,wall,no
 7,9,no,no,wall,wall,no
 8,0,no,no,no,wall,no
@@ -96,6 +96,6 @@ Xcoordinate,Ycoordinate,northWall,southWall,eastWall,westWall,Object
 9,4,wall,wall,no,no,no
 9,5,wall,wall,no,no,no
 9,6,wall,no,no,no,no
-9,7,wall,no,wall,no,no
+9,7,wall,no,wall,no,trap
 9,8,wall,no,wall,wall,trophy
 9,9,wall,door,wall,wall,end
