@@ -157,7 +157,7 @@ public class Game {
 						case "Tremaux":
 							int stepTremaux = Tremaux.mainCalc(myMaze);
 							frame.mazeText.clearText();
-							frame.mazeText.updateText("Tremaux calculation was succesful !\nThe minimum number of step to go out of this maze is "+ stepTremaux +" steps.");
+							frame.mazeText.updateText("Tremaux calculation was succesful !\nThe algorithm exited the maze in "+ stepTremaux +" steps.");
 							break;
 						}
 						frame.buttonListener.resetWasPressed();	

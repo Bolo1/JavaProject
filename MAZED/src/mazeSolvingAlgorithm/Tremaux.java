@@ -1,6 +1,7 @@
 package mazeSolvingAlgorithm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import maze.Maze;
 
@@ -15,37 +16,36 @@ public class Tremaux {
 		int nStep = 0;
 
 		if (Maze.checkMaze(myMaze.getDescription())) {
-			marks = Method.getVertices(nodeMap, myMaze.getStart(), myMaze.getEnd(),0);
+			marks = Method.getVertices(myMaze.getSize(), myMaze.getStart(), myMaze.getEnd(),0,nodeMap.length);
 			int currentNode = Method.findIdxFromVal(1, marks);
-			int  lastElem= (myMaze.getEnd()[0]*2+1)*(myMaze.getEnd()[1]*2+1)-1;
-			idx2EndMaze = Method.findIdx(lastElem,marks);
-
+			idx2EndMaze = (myMaze.getEnd()[0]+1)*(myMaze.getEnd()[1]+1)-1;
 			int prevNode = currentNode;
-			marks.set(currentNode, new int [] {marks.get(currentNode)[0],0});
+			marks.set(currentNode, new int [] {0,marks.get(currentNode)[1],marks.get(currentNode)[2]});
+			
 			while (currentNode != idx2EndMaze) {
 				count++;
-				int[] idx2Adj = Method.findAdj(marks, currentNode, nodeMap.length-2);
+				int[] idx2Adj = Method.findAdj(marks, currentNode, myMaze.getSize(),nodeMap);
 				int [] mark = {-1,-1,-1,-1};
-				marks.set(currentNode, new int [] {marks.get(currentNode)[0],marks.get(currentNode)[1]+1});
+				
 
 				for (int n = 0; n<idx2Adj.length;n++) {
 					if (idx2Adj[n]>=0) {
-						mark[n] = marks.get(idx2Adj[n])[1];
+						mark[n] = marks.get(idx2Adj[n])[0];
 					}
 				}
 				int newNode = choseNextNode(mark,idx2Adj,prevNode,currentNode,marks);
 				prevNode = currentNode;
 				currentNode = newNode;
-
-				if (count>1000) {
+				marks.set(currentNode, new int [] {marks.get(currentNode)[0]+1,marks.get(currentNode)[1],marks.get(currentNode)[2]});
+				
+				if (count>1000) {//avoid infinite loop
 					System.err.println("Calculation exited after 1000 iterations");
 					break;
 				}
 			}
-			//Count number of STep
-			nStep = 0;
-
-
+			//Count number of step
+			nStep = stepCalc(marks,currentNode,myMaze.getSize(),nodeMap);
+			
 		}else {
 			System.err.println("Calculation aborted, the maze contains element (e.g. Breakable, fake wall) that cannot currently be handled by the implemented Trémeaux algorithm");
 		}
@@ -54,12 +54,53 @@ public class Tremaux {
 
 	}
 
+	private static int stepCalc(ArrayList<int[]> marks,int currentNode,int[] mazeSize, boolean[][]nodeMap) {
+		int count= 0;
+		int newNode= currentNode;
+		int step=0;
+		int prevNode = currentNode;
+		while (currentNode != 0) {
+			count++;
+			
+			int [] idx2Adj = Method.findAdj(marks, currentNode, mazeSize, nodeMap);
+			
+			for (int i = 0; i<idx2Adj.length;i++) {
+				if(idx2Adj[i]>=0) {
+					if(marks.get(idx2Adj[i])[0]==1 & idx2Adj[i]!= prevNode) {
+						newNode = idx2Adj[i];
+						step++;
+						break;
+					}
+				}
+			}
+			if(newNode==currentNode) {
+				for (int i = 0; i<idx2Adj.length;i++) {
+					if(idx2Adj[i]>=0) {
+						if(marks.get(idx2Adj[i])[0]==2 & idx2Adj[i]!= prevNode) {
+							newNode = idx2Adj[i];
+							step++;
+						}
+					}
+				}
+			}else {
+				prevNode = currentNode;
+				currentNode = newNode;
+			}
+			
+			if(count>1000) {
+				System.err.println("Calculation exited after 1000 iterations");
+				break;
+			}
+		}
+		return step;
+	}
+
 	private static int choseNextNode(int[] mark, int[] idx2Adj, int prevNode,int currentNode, ArrayList<int[]> marks) {
 		int counter=0;
 		int idx2NewNode=0;
 		int idx2PrevNode = 0;
 		int markCounter0=0;
-		int markCounter1=0;
+		
 		ArrayList<Integer> idx2Mark0 = new ArrayList<Integer>();
 		ArrayList<Integer> idx2Mark1 = new ArrayList<Integer>();
 		ArrayList<Integer> idx2Choices = new ArrayList<Integer>();
@@ -71,7 +112,6 @@ public class Tremaux {
 					idx2Mark0.add(i);
 				}
 				if(mark[i]==1) {// if path was taken once
-					markCounter1++;
 					idx2Mark1.add(i);
 				}
 
@@ -88,21 +128,49 @@ public class Tremaux {
 					}
 
 					idx2Choices = removeIdx(i,idx2Choices);
-					counter--;
+					//counter--;
 
 				}
 			}
 		}
 		
-		if(counter==1 & marks.get(currentNode)[1]<2) {
-			marks.set(currentNode, new int [] {marks.get(currentNode)[0],marks.get(currentNode)[1]+1});
+		if(counter==1 & marks.get(currentNode)[0]<2) {
+			marks.set(currentNode, new int [] {marks.get(currentNode)[0]+1,marks.get(currentNode)[1],marks.get(currentNode)[2]});
 			idx2NewNode = idx2Adj[idx2Choices.get(0)];
 		}else {
-			if(marks.get(prevNode)[1]<2) {
+			if(marks.get(prevNode)[0]<2) {
 				
 				if(markCounter0 == counter-1) {
+					int idx2Dir = -1;
+					switch(currentNode-prevNode){
+					case 10:{
+						 idx2Dir = Method.findIdxArray(idx2Adj,currentNode+10);
+						break;
+					}
+					case -10:{
+						 idx2Dir = Method.findIdxArray(idx2Adj,currentNode-10);
+						break;
+					}
+					case 1:{
+						 idx2Dir = Method.findIdxArray(idx2Adj,currentNode+1);
+						break;
+						
+					}
+					case -1:{
+						 idx2Dir = Method.findIdxArray(idx2Adj,currentNode-1);
+						break;
+					}
+					default:{
+						System.err.println("Error finding direction");
+					}					
+					}
+					 if(idx2Dir>0){
+						idx2NewNode = idx2Adj[idx2Dir];
+					}else {
+						idx2NewNode = idx2Adj[idx2Mark0.get(0)];
+					}
 
-					idx2NewNode = idx2Adj[idx2Mark0.get(0)];
+					
 
 				}else {
 					idx2NewNode = idx2Adj[idx2PrevNode];
@@ -110,56 +178,53 @@ public class Tremaux {
 
 				
 			}else {
+				if(markCounter0 == counter-1) {
+					int idx2Dir = -1;
+					switch(currentNode-prevNode){
+					case 10:{
+						 idx2Dir = Method.findIdxArray(idx2Adj,currentNode+10);
+						break;
+					}
+					case -10:{
+						 idx2Dir = Method.findIdxArray(idx2Adj,currentNode-10);
+						break;
+					}
+					case 1:{
+						 idx2Dir = Method.findIdxArray(idx2Adj,currentNode+1);
+						break;
+						
+					}
+					case -1:{
+						 idx2Dir = Method.findIdxArray(idx2Adj,currentNode-1);
+						break;
+					}
+					default:{
+						System.err.println("Error finding direction");
+					}					
+					}
+					 if(idx2Dir>0){
+						idx2NewNode = idx2Adj[idx2Dir];
+						
+					}else {
+						idx2NewNode = idx2Adj[idx2Mark0.get(0)];
 				
-				if(!idx2Mark0.isEmpty())
+					}
+				}else {
+					if(!idx2Mark0.isEmpty())
+						
+						idx2NewNode = idx2Adj[idx2Mark0.get(0)];
 					
-					idx2NewNode = idx2Adj[idx2Mark0.get(0)];
+					else if(!idx2Mark1.isEmpty())
+						idx2NewNode = idx2Adj[idx2Mark1.get(0)];
+					else
+						System.err.println("Error no possibilities to move");
+					
+				}
 				
-				else if(!idx2Mark1.isEmpty())
-					idx2NewNode = idx2Adj[idx2Mark1.get(0)];
-				else
-					System.err.println("Error no possibilities to move");
+				
 			}
 				
 			}
-		
-
-//		if (counter<3) {
-//			if (counter==1 & marks.get(currentNode)[1]<2) {
-//				marks.set(currentNode, new int [] {marks.get(currentNode)[0],marks.get(currentNode)[1]+1});
-//				if(!idx2Mark0.isEmpty())
-//					idx2NewNode = idx2Adj[idx2Mark0.get(0)];
-//				else
-//					idx2NewNode = idx2Adj[idx2Mark1.get(0)];
-//			}
-//			else if(counter == 2) {
-//				if(!idx2Mark0.isEmpty())
-//					idx2NewNode = idx2Adj[idx2Mark0.get(0)];
-//				else {
-//
-//					if(mark[idx2PrevNode]<2) {
-//
-//						idx2NewNode = idx2Adj[idx2PrevNode];
-//
-//					}else {
-//
-//						idx2NewNode = idx2Adj[idx2Mark1.get(0)];
-//					}
-//				}
-//			}else {System.err.println("Error no possibilities to move");}
-//
-//		}else {
-//
-//			if(markCounter0 == counter-1) {
-//
-//				idx2NewNode = idx2Adj[idx2Mark0.get(0)];
-//
-//			}else {
-//
-//				idx2NewNode = idx2Adj[idx2PrevNode];
-//			}
-//
-//		}
 
 		return idx2NewNode;
 

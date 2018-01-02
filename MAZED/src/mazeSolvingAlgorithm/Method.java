@@ -4,26 +4,22 @@ import java.util.ArrayList;
 
 public class Method {
 	
-	public static ArrayList<int[]> getVertices(boolean[][] nodeMap, int [] startPos,int[] endPos,int val){
+	public static ArrayList<int[]> getVertices(int[] mazeSize, int [] startPos,int[] endPos,int val,int sizeNodeMap){
 		ArrayList<int[]> distances = new ArrayList<int[]>();
 		
-	for (int i = 0; i<nodeMap.length-2;i++) {//-2 we do not consider edges
-		
-		for (int j = 0; j<nodeMap[0].length-2;j++) {//-2 we do not consider edges
-			
-			if (nodeMap[nodeMap.length-2-i][1+j] == false) {//-2 and j+1 because we want the starting point node to be at 0,0
+	for (int i = 0; i<=mazeSize[0];i++) {
+	
+		for (int j = 0; j<=mazeSize[1];j++) {
 				
 				if (i==startPos[0]*2 & j==startPos[1]*2) {//*2 because of the fact that 1 case in Description is 2 case in nodeMap
 					if (val == 0) {
-					distances.add(new int[] {i*(nodeMap.length-2)+j,1});//Tremaux
+					distances.add(new int[] {1,sizeNodeMap-2,1});//Tremaux
 					}else {
-						distances.add(new int[] {i*(nodeMap.length-2)+j,0});//Dijkstra
+						distances.add(new int[] {0,sizeNodeMap-2,1});//Dijkstra
 					}
 				}else {
-				distances.add(new int[] {i*(nodeMap.length-2)+j,val});
+				distances.add(new int[] {val, (sizeNodeMap-2)-(i*2),1+(2*j)});
 				}
-				
-			}else {}
 		}
 	}
 	return distances;
@@ -39,57 +35,55 @@ public class Method {
 			}
 			
 		}
-		
-		
 		return idx;
-		
 	}
-	public static int[] findAdj(ArrayList<int[]> distances,int idx2Vertex,int nodeMapSize, boolean[] sptSet) {
-		int[] idx = {nodeMapSize,-nodeMapSize,+1,-1};
+	public static int[] findAdj(ArrayList<int[]> distances,int idx2Vertex,int[] mazeSize, boolean[] sptSet, boolean [][] nodeMap ) {
+		int[] idx = {mazeSize[1]+1,-mazeSize[1]-1,+1,-1};
+		int [] idx2Walls = {-1,1,1,-1};//order inverted because X idx is inverted in nodeMap
 		int[]idx2adj = {-1,-1,-1,-1};
+		
 		for (int i=0; i<idx.length;i++) {
 
-			if (distances.get(idx2Vertex)[0]+idx[i]<distances.get(distances.size()-1)[0]+1 & distances.get(idx2Vertex)[0]+idx[i]>0) {
-				for (int j=0; j<distances.size();j++) {
-					if (distances.get(j)[0]==distances.get(idx2Vertex)[0]+idx[i] & sptSet[j] ==false  ) {
-						//cond 1: An element in distances in j should have the same value as a potential adjacent to the vertex 
-						//cond 2: The adjacent should not already be part of the set
-						if(i>1) {
-							if (distances.get(j)[0]/idx[0] == distances.get(idx2Vertex)[0]/idx[0]) {//cond 3: The adjacent along line ("horizontal") should be on the same line as the vertex
-								idx2adj[i] = j;
-								}
-						}else {
-							idx2adj[i] = j;
-						}
+			if (idx2Vertex+idx[i]<distances.size() & idx2Vertex+idx[i]>0) {//If index is in between the Vertexes boundaries
+				if(i<2) {
+					if(!nodeMap[distances.get(idx2Vertex)[1]+idx2Walls[i]][distances.get(idx2Vertex)[2]] & sptSet[idx2Vertex+idx[i]]==false) {
+						
+					idx2adj[i] = idx2Vertex+idx[i];
 					}
+					}else {
+						if(!nodeMap[distances.get(idx2Vertex)[1]][distances.get(idx2Vertex)[2]+idx2Walls[i]] & sptSet[idx2Vertex+idx[i]]==false) {
+							idx2adj[i] = idx2Vertex+idx[i];
+					}}
+					
+				}else {
+					
 				}
-			}
-		}
-		
+		}	
 		return idx2adj;
 	}
 	
-	public static int[] findAdj(ArrayList<int[]> distances,int idx2Vertex,int nodeMapSize) {
-		int[] idx = {nodeMapSize,-nodeMapSize,+1,-1};
+	public static int[] findAdj(ArrayList<int[]> distances,int idx2Vertex,int[] mazeSize,boolean [][] nodeMap ) {
+		int[] idx = {mazeSize[1]+1,-mazeSize[1]-1,+1,-1};
+		int [] idx2Walls = {-1,1,1,-1};//order inverted because X idx is inverted in nodeMap
 		int[]idx2adj = {-1,-1,-1,-1};
+		
 		for (int i=0; i<idx.length;i++) {
 
-			if (distances.get(idx2Vertex)[0]+idx[i]<distances.get(distances.size()-1)[0]+1 & distances.get(idx2Vertex)[0]+idx[i]>0) {
-				for (int j=0; j<distances.size();j++) {
-					if (distances.get(j)[0]==distances.get(idx2Vertex)[0]+idx[i]) {
-						//cond 1: An element in distances in j should have the same value as a potential adjacent to the vertex 
-						if(i>1) {
-							if (distances.get(j)[0]/idx[0] == distances.get(idx2Vertex)[0]/idx[0]) {//cond 3: The adjacent along line ("horizontal") should be on the same line as the vertex
-								idx2adj[i] = j;
-								}
-						}else {
-							idx2adj[i] = j;
-						}
+			if (idx2Vertex+idx[i]<distances.size() & idx2Vertex+idx[i]>=0) {//If index is in between the Vertexes boundaries
+				if(i<2) {
+					if(!nodeMap[distances.get(idx2Vertex)[1]+idx2Walls[i]][distances.get(idx2Vertex)[2]]) {
+						
+					idx2adj[i] = idx2Vertex+idx[i];
 					}
+					}else {
+						if(!nodeMap[distances.get(idx2Vertex)[1]][distances.get(idx2Vertex)[2]+idx2Walls[i]]) {
+							idx2adj[i] = idx2Vertex+idx[i];
+					}}
+					
+				}else {
+					
 				}
-			}
-		}
-		
+		}	
 		return idx2adj;
 	}
 	
@@ -104,12 +98,12 @@ public class Method {
 			}
 		}
 		
-		int val = distances.get(firstIdx)[1];
+		int val = distances.get(firstIdx)[0];
 		int idx=firstIdx;
 		
 			for (int i = 0; i<distances.size();i++) {
 				if(spt[i]==false) {
-				int val2cmp = distances.get(i)[1];
+				int val2cmp = distances.get(i)[0];
 				int idx2cmp = i;
 				if (val2cmp<val) {
 					val = val2cmp;
@@ -123,7 +117,7 @@ public class Method {
 	public static int findIdxFromVal(int elem, ArrayList<int[]> arrayList) {
 		int idx =-1;
 		for (int j=0; j<arrayList.size();j++) {
-			if(arrayList.get(j)[1]==elem) {
+			if(arrayList.get(j)[0]==elem) {
 				idx = j;
 				break;
 				
@@ -131,6 +125,16 @@ public class Method {
 			
 		}
 		
+		return idx;
+	}
+
+	public static int findIdxArray(int[] idx2Adj, int val) {
+		int idx = -1;
+		for (int i = 0;i<idx2Adj.length;i++) {
+			if(idx2Adj[i] == val) {
+				idx=i;
+			}
+		}
 		return idx;
 	}
 	
